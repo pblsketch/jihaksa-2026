@@ -866,10 +866,10 @@ function ck(label, on) {
 /* ═══════════════ ⑦ 관리자 · PC 대시보드 ═══════════════ */
 
 var GATES = [
-  { key: 'open_ox',       n: '①', t: 'O · X 퀴즈',   d: '사람일까, AI일까? · 3문항',       board: 'ox', field: 'ox' },
-  { key: 'open_a',        n: '②', t: '실습 A',       d: '나의 미래 일기 · 활동 9개',       board: 'a',  field: 'A'  },
-  { key: 'open_b',        n: '③', t: '실습 B',       d: '학술 연구 포스터 · 활동 7개',     board: 'b',  field: 'B'  },
-  { key: 'open_sentence', n: '④', t: '오늘의 한 문장', d: '나는 학생에게 AI를 맡기기 전에…', board: 'sn', field: 'sn' }
+  { key: 'open_ox',       n: '①', t: 'O · X 퀴즈',   d: '사람일까, AI일까? · 3문항',       board: 'ox', field: 'ox', s: 'OX 퀴즈' },
+  { key: 'open_a',        n: '②', t: '실습 A',       d: '나의 미래 일기 · 활동 9개',       board: 'a',  field: 'A',  s: '실습 A'  },
+  { key: 'open_b',        n: '③', t: '실습 B',       d: '학술 연구 포스터 · 활동 7개',     board: 'b',  field: 'B',  s: '실습 B'  },
+  { key: 'open_sentence', n: '④', t: '오늘의 한 문장', d: '나는 학생에게 AI를 맡기기 전에…', board: 'sn', field: 'sn', s: '한 문장' }
 ];
 
 function rAdmin() {
@@ -882,11 +882,12 @@ function rAdmin() {
         '<div class="kpi" id="admKpi"></div>' +
         '<div class="sp"></div>' +
         '<div class="bl">' +
-          '<span class="bl-lb">현황판</span>' +
+          '<span class="bl-lb">모니터에 띄우기</span>' +
           GATES.map(function (g) {
-            return '<a href="board.html' + q + '#' + g.board + '" target="_blank">' + g.n + '</a>';
+            return '<a href="board.html' + q + '#' + g.board + '" target="_blank">' +
+              g.n + ' ' + esc(g.s) + '</a>';
           }).join('') +
-          '<a href="board.html' + q + '#status" target="_blank" class="wide">제출 현황</a>' +
+          '<a href="board.html' + q + '#status" target="_blank" class="alt">제출 현황</a>' +
         '</div>' +
         '<button class="btn ghost sm" onclick="changeSession()">연수 전환</button>' +
       '</div>' +
