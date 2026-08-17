@@ -275,7 +275,138 @@ table.panel td.nm small{display:block;font-weight:400;font-size:11px;color:var(-
 .mat .go{color:var(--blue);font-size:18px;flex:none}
 .mat.soon{opacity:.5}
 
-/* ── 관리자 ── */
+/* ═══════════════════════════════════════════════
+   관리자 · PC 대시보드
+   참가자 화면은 모바일 폭(560px) 그대로 두고,
+   관리자일 때만 body.adm-mode 로 넓힙니다.
+   ═══════════════════════════════════════════════ */
+body.adm-mode #app{max-width:none;padding:0}
+.adm{max-width:1680px;margin:0 auto;padding:0 26px 30px}
+
+.adm-bar{
+  position:sticky;top:0;z-index:40;background:var(--paper);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:16px 0 13px;border-bottom:1px solid var(--line);margin-bottom:18px;
+}
+.adm-bar .tt{font-family:'Noto Serif KR',serif;font-size:23px;font-weight:600;flex:none}
+.adm-bar .sb{font-size:13px;color:var(--ink-soft);flex:none}
+.adm-bar .sp{flex:1;min-width:12px}
+.adm-bar .kpi{display:flex;align-items:baseline;gap:6px;flex:none;margin-left:6px}
+.adm-bar .kpi .v{font-family:'Noto Serif KR',serif;font-size:26px;line-height:1}
+.adm-bar .kpi .v.done{color:var(--green)}
+.adm-bar .kpi .k{font-size:12.5px;color:var(--ink-soft)}
+.adm-bar .kpi .dot{width:4px;height:4px;border-radius:50%;background:var(--line);margin:0 6px;align-self:center}
+
+.adm-bar .bl{display:flex;align-items:center;gap:5px;flex:none;
+  background:var(--paper2);border:1px solid var(--line);border-radius:11px;padding:5px 9px}
+.adm-bar .bl-lb{font-size:11.5px;color:var(--ink-soft);font-weight:700;margin-right:3px}
+.adm-bar .bl a{
+  display:grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:8px;
+  background:var(--blue);color:#fff;text-decoration:none;font-size:14px;font-weight:700;
+}
+.adm-bar .bl a.wide{font-size:12.5px;padding:0 12px}
+.adm-bar .bl a:hover{background:var(--blue-deep)}
+
+.adm-lead{font-size:13.5px;color:var(--ink-soft);margin-bottom:12px}
+.adm-lead b{color:var(--ink)}
+
+/* ── 과제 카드 (제어 + 현황 한 덩어리) ── */
+.adm-gates{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.gcard{
+  background:var(--card);border:1px solid var(--line);border-left:5px solid var(--ink-soft);
+  border-radius:14px;padding:16px 18px;box-shadow:var(--shadow-sm);
+  transition:border-color .25s,background .25s;
+}
+.gcard.on{border-left-color:var(--green);background:#fbf8ec}
+.gcard .gh{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.gcard .gn{font-size:16px;color:var(--ink-soft);flex:none}
+.gcard .gt{font-weight:700;font-size:16px;flex:1;min-width:0}
+.gcard .gstate{
+  flex:none;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;
+  background:var(--paper2);color:var(--ink-soft);
+}
+.gcard.on .gstate{background:var(--green);color:#fff}
+.gcard .gd{font-size:12px;color:var(--ink-soft);margin-bottom:12px}
+.gcard .gnum{font-family:'Noto Serif KR',serif;font-size:30px;line-height:1;margin-bottom:8px}
+.gcard .gnum small{font-size:13px;color:var(--ink-soft);font-family:Pretendard,sans-serif}
+.gcard .gtrack{height:7px;border-radius:4px;background:var(--paper2);overflow:hidden;margin-bottom:13px}
+.gcard .gtrack i{display:block;height:100%;background:var(--green);transition:width .5s}
+.gcard:not(.on) .gtrack i{background:var(--ink-soft);opacity:.4}
+.gcard .gfoot{display:flex;align-items:center;gap:10px}
+.gcard .glb{font-size:11.5px;color:var(--ink-soft);flex:1;min-width:0}
+.gcard .gboard{font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;flex:none;white-space:nowrap}
+.gcard .gboard:hover{text-decoration:underline}
+
+/* ── 3단 패널 ── */
+.adm-grid{display:grid;grid-template-columns:320px 1fr 1.15fr;gap:16px;align-items:start}
+.pan{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow-sm)}
+.pan-h{
+  font-size:12.5px;letter-spacing:.06em;font-weight:700;color:var(--ink-soft);
+  margin-bottom:13px;display:flex;align-items:center;gap:9px;
+}
+.pan-h .live{margin-left:auto}
+.pan-scroll{max-height:min(56vh,600px);overflow-y:auto;margin:0 -6px;padding:0 6px}
+.pan .toggle{background:var(--paper);margin-bottom:9px}
+.pan .btn.danger{padding:12px;font-size:14px}
+.pan .hint{margin-top:9px}
+
+/* 참가자 표 */
+.ptable{width:100%;border-collapse:collapse;font-size:13.5px}
+.ptable thead th{
+  position:sticky;top:0;background:var(--card);z-index:1;
+  font-size:11.5px;color:var(--ink-soft);font-weight:700;text-align:center;
+  padding:0 4px 8px;border-bottom:1px solid var(--line);
+}
+.ptable thead th:first-child{text-align:left}
+.ptable td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:center}
+.ptable td.nm{text-align:left;font-weight:600;max-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ptable td.y{color:var(--green);font-weight:800}
+.ptable td.n{color:var(--line)}
+.ptable tr.all td.nm{color:var(--green)}
+.ptable tr.all td.nm::after{content:'●';font-size:8px;margin-left:6px;vertical-align:middle}
+
+/* 응답 훑어보기 */
+.peek-tabs{display:flex;gap:5px;background:var(--paper2);padding:4px;border-radius:10px;margin-bottom:12px}
+.peek-tabs button{
+  flex:1;padding:8px 0;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.peek-tabs button.on{background:#fff;color:var(--ink);box-shadow:var(--shadow-sm)}
+.peek-tabs em{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--ink-soft);
+  border-radius:10px;padding:1px 7px}
+.peek-tabs button.on em{background:var(--blue)}
+
+.peek-item{border-bottom:1px solid var(--line);padding:11px 0}
+.peek-item:last-child{border-bottom:none}
+.peek-item .pnm{font-size:12px;color:var(--ink-soft);font-weight:700;margin-bottom:5px;display:flex;gap:8px;align-items:center}
+.peek-item .pfill{font-size:10.5px;background:var(--paper2);border-radius:10px;padding:1px 7px;font-weight:600}
+.peek-item .ptx{font-family:'Noto Serif KR',serif;font-size:14.5px;line-height:1.75;color:var(--ink-soft)}
+.peek-item .ptx b{color:var(--blue-deep);font-weight:700;
+  background:linear-gradient(transparent 58%, #f2dfa8 58%);padding:0 2px;border-radius:2px}
+.pline{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:3px 0;line-height:1.45}
+.pline .pno{width:16px;color:var(--ink-soft);flex:none;text-align:right}
+.pline .pact{flex:none;max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pline .prisk{flex:none;width:20px;text-align:center;font-weight:800;color:var(--ink-soft)}
+.pline .prisk.r상{color:var(--red)} .pline .prisk.r중{color:var(--amber)} .pline .prisk.r하{color:var(--green)}
+.pline .pstage{flex:none;width:20px;text-align:center;font-weight:800;color:var(--blue)}
+.pline .pmemo{flex:1;min-width:0;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media (max-width:1400px){
+  .adm-grid{grid-template-columns:290px 1fr 1fr}
+}
+@media (max-width:1150px){
+  .adm-gates{grid-template-columns:repeat(2,1fr)}
+  .adm-grid{grid-template-columns:1fr 1fr}
+  .adm-grid > .pan:first-child{grid-column:1 / -1}
+}
+@media (max-width:760px){
+  .adm{padding:0 16px 30px}
+  .adm-gates,.adm-grid{grid-template-columns:1fr}
+  .adm-grid > .pan:first-child{grid-column:auto}
+  .adm-bar .sb{display:none}
+}
+
+/* ── 관리자 (구형 · 좁은 화면 공용) ── */
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px}
 .stat .v{font-family:'Noto Serif KR',serif;font-size:27px;line-height:1.1;margin-bottom:4px}

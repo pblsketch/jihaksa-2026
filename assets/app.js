@@ -12,7 +12,8 @@ var S = {
   screen: 'boot',
   ox: { i: 0, ans: [null, null, null] },
   pr: { A: {}, B: {} },
-  adminTab: 'ctrl',
+  admPeek: 'sn',      // 관리자 · 응답 훑어보기에서 보고 있는 것
+  admData: null,      // 관리자 · 마지막으로 받아 온 집계
   chans: [],          // 화면별 realtime 채널
   gateChan: null,     // 설정 채널 (상시)
   waitingFor: null    // 대기 중인 게이트 key
@@ -129,6 +130,8 @@ function go(screen, arg) {
   dropChans();
   S.waitingFor = null;
   S.screen = screen;
+  // 관리자 화면만 PC 폭으로 넓힙니다 (참가자 화면은 그대로 모바일 폭)
+  document.body.classList.toggle('adm-mode', screen === 'admin');
   window.scrollTo(0, 0);
   ({
     sessionPick:  rSessionPick,
@@ -860,128 +863,203 @@ function ck(label, on) {
   return '<div><span class="c' + (on ? ' on' : '') + '">✓</span>' + esc(label) + '</div>';
 }
 
-/* ═══════════════ ⑦ 관리자 ═══════════════ */
+/* ═══════════════ ⑦ 관리자 · PC 대시보드 ═══════════════ */
+
+var GATES = [
+  { key: 'open_ox',       n: '①', t: 'O · X 퀴즈',   d: '사람일까, AI일까? · 3문항',       board: 'ox', field: 'ox' },
+  { key: 'open_a',        n: '②', t: '실습 A',       d: '나의 미래 일기 · 활동 9개',       board: 'a',  field: 'A'  },
+  { key: 'open_b',        n: '③', t: '실습 B',       d: '학술 연구 포스터 · 활동 7개',     board: 'b',  field: 'B'  },
+  { key: 'open_sentence', n: '④', t: '오늘의 한 문장', d: '나는 학생에게 AI를 맡기기 전에…', board: 'sn', field: 'sn' }
+];
+
 function rAdmin() {
-  app().innerHTML = header('관리자 · 진행 제어') +
-    '<div class="screen">' +
-      '<div class="card blue" style="padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px">' +
-        '<div style="flex:1"><div style="font-weight:600;font-size:15px">' + esc(ses().name) + '</div>' +
-        '<div class="hint" style="margin-top:2px">이 연수의 데이터만 표시됩니다</div></div>' +
-        '<button class="btn ghost sm" onclick="changeSession()">전환</button>' +
-      '</div>' +
-      '<div class="tabs">' +
-        '<button id="t1" onclick="adminTab(\'ctrl\')">진행 제어</button>' +
-        '<button id="t2" onclick="adminTab(\'roster\')">제출 현황</button>' +
-        '<button id="t3" onclick="adminTab(\'board\')">현황판</button>' +
-      '</div>' +
-      '<div id="aBody"><div class="empty">불러오는 중…</div></div>' +
-    '</div>';
-  adminTab(S.adminTab);
-}
-
-function adminTab(t) {
-  S.adminTab = t;
-  dropChans();
-  ['t1', 't2', 't3'].forEach(function (id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.remove('on');
-  });
-  var cur = document.getElementById({ ctrl: 't1', roster: 't2', board: 't3' }[t]);
-  if (cur) cur.classList.add('on');
-
-  if (t === 'board') { renderAdmin(); return; }
-  watch(['participants', 'ox_responses', 'practice_responses', 'sentences'], renderAdmin, 'admin-' + t);
-}
-
-async function renderAdmin() {
-  var b = document.getElementById('aBody');
-  if (!b) return;
-  if (S.adminTab === 'ctrl')   { b.innerHTML = adminCtrl(); return; }
-  if (S.adminTab === 'board')  { b.innerHTML = adminBoardLinks(); return; }
-  b.innerHTML = await adminRoster();
-}
-
-function gate(key, title, desc) {
-  var on = isOpen(key);
-  return '<div class="toggle gate' + (on ? ' on' : '') + '">' +
-    '<div class="tx"><div class="tt">' + esc(title) + '</div><div class="ds">' + esc(desc) + '</div></div>' +
-    '<div class="sw' + (on ? ' on' : '') + '" onclick="setCfg(\'' + key + '\',\'' + (on ? 'N' : 'Y') + '\')"></div>' +
-    '</div>';
-}
-
-function adminCtrl() {
-  return '<div class="section-t">과제 열기 · 닫기</div>' +
-    '<div class="hint" style="margin:-6px 0 12px">켜는 즉시 선생님들 화면이 저절로 바뀝니다. 새로고침 안내는 필요 없습니다.</div>' +
-    gate('open_ox',       '① O · X 퀴즈',            '사람일까, AI일까? · 3문항') +
-    gate('open_a',        '② 실습 A · 나의 미래 일기',   '독서 토론과 글쓰기 · 활동 9개') +
-    gate('open_b',        '③ 실습 B · 학술 연구 포스터', '주제 탐구 독서 · 활동 7개') +
-    gate('open_sentence', '④ 오늘의 한 문장',          '나는 학생에게 AI를 맡기기 전에…') +
-
-    '<div class="section-t">공개 제어</div>' +
-    gate('ox_reveal',      'OX 정답 공개',   '켜면 참가자 화면과 현황판에 정답·방송 패널 성적표가 뜹니다') +
-    gate('materials_open', '자료 전체 공개', '켜면 과제를 다 안 해도 자료 페이지가 열립니다') +
-    gate('require_both',   '실습 A·B 둘 다 필수', '끄면 A 또는 B 하나만 내도 자료가 열립니다 (기본: 꺼짐)') +
-
-    '<div class="section-t">위험 구역</div>' +
-    '<button class="btn danger" onclick="doReset()">' + esc(ses().name) + ' 응답 모두 비우기</button>' +
-    '<div class="hint" style="text-align:center">리허설 기록 정리용입니다. 다른 연수 데이터는 그대로 둡니다.</div>' +
-    '<div class="foot">관리자 · 박준일</div>';
-}
-
-function adminBoardLinks() {
   var q = '?ses=' + encodeURIComponent(S.session);
-  return '<div class="hint" style="margin-bottom:12px">모니터에 띄울 화면입니다. 새 탭으로 열어 전체화면(F11)으로 쓰세요.</div>' +
-    '<div class="board-links">' +
-      '<a href="board.html' + q + '#ox" target="_blank">① OX 퀴즈<small>막대그래프</small></a>' +
-      '<a href="board.html' + q + '#a"  target="_blank">② 실습 A<small>단계 히트맵</small></a>' +
-      '<a href="board.html' + q + '#b"  target="_blank">③ 실습 B<small>단계 히트맵</small></a>' +
-      '<a href="board.html' + q + '#sn" target="_blank">④ 한 문장<small>문장 스트림</small></a>' +
-    '</div>' +
-    '<a class="btn ghost" style="text-decoration:none" href="board.html' + q + '#status" target="_blank">제출 현황판 (전체 진행률)</a>' +
-    '<div class="hint" style="text-align:center;margin-top:14px">현황판에서 <b>← →</b> 키로 화면을 넘길 수 있습니다.</div>' +
-    '<div class="foot">관리자 · 박준일</div>';
+  app().innerHTML =
+    '<div class="adm">' +
+      '<div class="adm-bar">' +
+        '<div class="tt">' + esc(ses().name) + '</div>' +
+        '<div class="sb">2026 지학사 국어과 연수 · 관리자</div>' +
+        '<div class="kpi" id="admKpi"></div>' +
+        '<div class="sp"></div>' +
+        '<div class="bl">' +
+          '<span class="bl-lb">현황판</span>' +
+          GATES.map(function (g) {
+            return '<a href="board.html' + q + '#' + g.board + '" target="_blank">' + g.n + '</a>';
+          }).join('') +
+          '<a href="board.html' + q + '#status" target="_blank" class="wide">제출 현황</a>' +
+        '</div>' +
+        '<button class="btn ghost sm" onclick="changeSession()">연수 전환</button>' +
+      '</div>' +
+
+      '<div class="adm-lead">활동을 시작할 때 아래 카드의 스위치를 켜면, <b>선생님들 화면이 저절로 바뀝니다.</b> 새로고침 안내는 필요 없습니다.</div>' +
+      '<div class="adm-gates" id="admGates"></div>' +
+
+      '<div class="adm-grid">' +
+        '<section class="pan"><div class="pan-h">공개 제어</div><div id="admCtrl"></div></section>' +
+        '<section class="pan"><div class="pan-h">참가자 <span id="admPeopleN"></span><span class="live"><i></i>실시간</span></div>' +
+          '<div class="pan-scroll" id="admPeople"></div></section>' +
+        '<section class="pan"><div class="pan-h">지금 들어온 응답</div>' +
+          '<div class="peek-tabs" id="admPeekTabs"></div>' +
+          '<div class="pan-scroll" id="admPeek"></div></section>' +
+      '</div>' +
+      '<div class="foot">관리자 · 박준일</div>' +
+    '</div>';
+
+  watch(['participants', 'ox_responses', 'practice_responses', 'sentences'], loadAdminData, 'admin');
 }
 
-async function adminRoster() {
+/** 한 번에 다 받아 와서 화면 전체를 다시 그립니다 */
+async function loadAdminData() {
+  if (S.screen !== 'admin') return;
   var q = await Promise.all([
     sb().from('participants').select('id,name,last_seen').eq('ses', S.session).order('last_seen', { ascending: false }),
-    sb().from('ox_responses').select('pid,score').eq('ses', S.session),
-    sb().from('practice_responses').select('pid,code').eq('ses', S.session),
-    sb().from('sentences').select('pid,body').eq('ses', S.session)
+    sb().from('ox_responses').select('pid,score,answers').eq('ses', S.session),
+    sb().from('practice_responses').select('pid,name,code,res,filled,created_at').eq('ses', S.session).order('created_at', { ascending: false }),
+    sb().from('sentences').select('pid,name,body,created_at').eq('ses', S.session).order('created_at', { ascending: false })
   ]);
+
   var people = q[0].data || [];
-  var oxM = {}, prM = {}, snM = {};
-  (q[1].data || []).forEach(function (r) { oxM[r.pid] = r.score; });
-  (q[2].data || []).forEach(function (r) { (prM[r.pid] = prM[r.pid] || {})[r.code] = true; });
-  (q[3].data || []).forEach(function (r) { snM[r.pid] = r.body; });
+  var ox = {}, pr = {}, sn = {};
+  (q[1].data || []).forEach(function (r) { ox[r.pid] = r; });
+  (q[2].data || []).forEach(function (r) { (pr[r.pid] = pr[r.pid] || {})[r.code] = r; });
+  (q[3].data || []).forEach(function (r) { sn[r.pid] = r; });
+
+  S.admData = {
+    people: people, ox: ox, pr: pr, sn: sn,
+    practice: q[2].data || [], sentences: q[3].data || []
+  };
+  renderAdmin();
+}
+
+/** 설정이 바뀌었을 때도 불립니다 (데이터는 다시 안 받아 옴) */
+function renderAdmin() {
+  if (S.screen !== 'admin') return;
+  var d = S.admData;
+  if (!d) return;
 
   var both = S.cfg.require_both === 'Y';
-  var doneAll = 0;
-  var rows = people.map(function (p) {
-    var pr = prM[p.id] || {};
-    var prOk = both ? (pr.A && pr.B) : (pr.A || pr.B);
-    var all = (oxM[p.id] != null) && prOk && (snM[p.id] != null);
-    if (all) doneAll++;
-    return '<div class="row">' +
-      '<div class="nm">' + esc(p.name) + '</div>' +
-      '<div class="sc">' + (oxM[p.id] != null ? oxM[p.id] + '/3' : '') + '</div>' +
-      '<div class="dots">' +
-        '<i class="' + (oxM[p.id] != null ? 'on' : '') + '"></i>' +
-        '<i class="' + (pr.A ? 'on' : '') + '"></i>' +
-        '<i class="' + (pr.B ? 'on' : '') + '"></i>' +
-        '<i class="' + (snM[p.id] != null ? 'on' : '') + '"></i>' +
-      '</div></div>';
+  var N = d.people.length;
+  var cnt = { ox: 0, A: 0, B: 0, sn: 0 }, doneAll = 0;
+  d.people.forEach(function (p) {
+    var x = d.pr[p.id] || {};
+    if (d.ox[p.id]) cnt.ox++;
+    if (x.A) cnt.A++;
+    if (x.B) cnt.B++;
+    if (d.sn[p.id]) cnt.sn++;
+    var prOk = both ? (x.A && x.B) : (x.A || x.B);
+    if (d.ox[p.id] && prOk && d.sn[p.id]) doneAll++;
+  });
+
+  // ── 상단 지표
+  document.getElementById('admKpi').innerHTML =
+    '<span class="v">' + N + '</span><span class="k">명 접속</span>' +
+    '<span class="dot"></span>' +
+    '<span class="v done">' + doneAll + '</span><span class="k">명 모두 완료</span>';
+
+  // ── 과제 카드 4개 (제어 + 현황을 한 덩어리로)
+  var qs = '?ses=' + encodeURIComponent(S.session);
+  document.getElementById('admGates').innerHTML = GATES.map(function (g) {
+    var on = isOpen(g.key);
+    var c = cnt[g.field];
+    var pct = N ? Math.round(c / N * 100) : 0;
+    return '<div class="gcard' + (on ? ' on' : '') + '">' +
+      '<div class="gh"><span class="gn">' + g.n + '</span>' +
+        '<span class="gt">' + esc(g.t) + '</span>' +
+        '<span class="gstate">' + (on ? '열림' : '닫힘') + '</span></div>' +
+      '<div class="gd">' + esc(g.d) + '</div>' +
+      '<div class="gnum">' + c + '<small> / ' + N + '명</small></div>' +
+      '<div class="gtrack"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="gfoot">' +
+        '<div class="sw' + (on ? ' on' : '') + '" onclick="setCfg(\'' + g.key + '\',\'' + (on ? 'N' : 'Y') + '\')"></div>' +
+        '<span class="glb">' + (on ? '켜짐 · 누르면 닫힘' : '꺼짐 · 누르면 열림') + '</span>' +
+        '<a class="gboard" href="board.html' + qs + '#' + g.board + '" target="_blank">현황판 ↗</a>' +
+      '</div>' +
+      '</div>';
   }).join('');
 
-  return '<div class="stats">' +
-      '<div class="stat hl"><div class="v">' + people.length + '</div><div class="k">접속 인원</div></div>' +
-      '<div class="stat"><div class="v">' + doneAll + '</div><div class="k">모두 완료</div></div>' +
-      '<div class="stat"><div class="v">' + Object.keys(oxM).length + '</div><div class="k">OX 퀴즈</div></div>' +
-      '<div class="stat"><div class="v">' + (q[2].data || []).length + '</div><div class="k">실습 (A+B)</div></div>' +
-    '</div>' +
-    '<div class="hint" style="margin-bottom:12px">문장 <b>' + Object.keys(snM).length + '명</b> · <span class="live"><i></i>실시간</span></div>' +
-    (!people.length ? '<div class="empty">아직 접속한 분이 없습니다.</div>' : rows) +
-    '<div class="hint" style="margin-top:14px">● 4개 = OX · 실습A · 실습B · 문장 &nbsp;/&nbsp; 왼쪽 숫자 = OX 점수</div>';
+  // ── 공개 제어
+  function tg(key, title, desc) {
+    var on = isOpen(key);
+    return '<div class="toggle gate' + (on ? ' on' : '') + '">' +
+      '<div class="tx"><div class="tt">' + esc(title) + '</div><div class="ds">' + esc(desc) + '</div></div>' +
+      '<div class="sw' + (on ? ' on' : '') + '" onclick="setCfg(\'' + key + '\',\'' + (on ? 'N' : 'Y') + '\')"></div>' +
+      '</div>';
+  }
+  document.getElementById('admCtrl').innerHTML =
+    tg('ox_reveal',      'OX 정답 공개',        '참가자 화면과 현황판에 정답·방송 패널 성적표가 함께 뜹니다') +
+    tg('materials_open', '자료 전체 공개',      '과제를 다 안 해도 자료 페이지가 열립니다') +
+    tg('require_both',   '실습 A·B 둘 다 필수', '꺼두면 A 또는 B 하나만 내도 자료가 열립니다') +
+    '<div class="pan-h" style="margin-top:22px">위험 구역</div>' +
+    '<button class="btn danger" onclick="doReset()">응답 모두 비우기</button>' +
+    '<div class="hint" style="text-align:center">리허설 기록 정리용입니다.<br>다른 연수 데이터는 그대로 둡니다.</div>';
+
+  // ── 참가자 표
+  document.getElementById('admPeopleN').textContent = N + '명';
+  document.getElementById('admPeople').innerHTML = !N
+    ? '<div class="empty">아직 접속한 분이 없습니다.</div>'
+    : '<table class="ptable"><thead><tr><th>이름</th><th>OX</th><th>A</th><th>B</th><th>문장</th></tr></thead><tbody>' +
+      d.people.map(function (p) {
+        var x = d.pr[p.id] || {};
+        var prOk = both ? (x.A && x.B) : (x.A || x.B);
+        var all = d.ox[p.id] && prOk && d.sn[p.id];
+        var mk = function (v) { return v ? '<td class="y">✓</td>' : '<td class="n">·</td>'; };
+        return '<tr class="' + (all ? 'all' : '') + '">' +
+          '<td class="nm">' + esc(p.name) + '</td>' +
+          '<td class="' + (d.ox[p.id] ? 'y' : 'n') + '">' + (d.ox[p.id] ? d.ox[p.id].score + '/3' : '·') + '</td>' +
+          mk(x.A) + mk(x.B) + mk(d.sn[p.id]) +
+          '</tr>';
+      }).join('') + '</tbody></table>';
+
+  // ── 응답 훑어보기
+  document.getElementById('admPeekTabs').innerHTML = [
+    ['sn', '한 문장', cnt.sn], ['A', '실습 A', cnt.A], ['B', '실습 B', cnt.B]
+  ].map(function (x) {
+    return '<button class="' + (S.admPeek === x[0] ? 'on' : '') + '" onclick="setPeek(\'' + x[0] + '\')">' +
+      x[1] + '<em>' + x[2] + '</em></button>';
+  }).join('');
+  renderPeek();
+}
+
+function setPeek(k) { S.admPeek = k; renderAdmin(); }
+
+/** 강의 중 인용할 수 있게 응답 「원문」을 보여 줍니다 */
+function renderPeek() {
+  var el = document.getElementById('admPeek');
+  if (!el || !S.admData) return;
+  var d = S.admData;
+
+  if (S.admPeek === 'sn') {
+    var s = window.SENTENCE_PROMPT;
+    el.innerHTML = !d.sentences.length
+      ? '<div class="empty">아직 제출한 분이 없습니다.</div>'
+      : d.sentences.map(function (f) {
+          return '<div class="peek-item"><div class="pnm">' + esc(f.name) + '</div>' +
+            '<div class="ptx">' + esc(s.before) + ' <b>' + esc(f.body) + '</b> ' + esc(s.after) + '</div></div>';
+        }).join('');
+    return;
+  }
+
+  var code = S.admPeek;
+  var def = sheetDefOf(code);
+  var list = d.practice.filter(function (x) { return x.code === code; });
+  el.innerHTML = !list.length
+    ? '<div class="empty">아직 제출한 분이 없습니다.</div>'
+    : list.map(function (f) {
+        var lines = Object.keys(f.res || {}).sort(function (a, b) { return a - b; }).map(function (no) {
+          var v = f.res[no] || {};
+          if (!v.risk && !v.stage && !String(v.memo || '').trim()) return '';
+          var item = def.items.filter(function (x) { return String(x.no) === String(no); })[0];
+          return '<div class="pline">' +
+            '<span class="pno">' + esc(no) + '</span>' +
+            '<span class="pact">' + esc(item ? (item.short || item.page) : '') + '</span>' +
+            '<span class="prisk r' + esc(v.risk || '') + '">' + esc(v.risk || '·') + '</span>' +
+            '<span class="pstage">' + esc(v.stage || '·') + '</span>' +
+            (String(v.memo || '').trim() ? '<span class="pmemo">' + esc(v.memo) + '</span>' : '') +
+            '</div>';
+        }).join('');
+        return '<div class="peek-item"><div class="pnm">' + esc(f.name) +
+          '<span class="pfill">' + f.filled + '칸</span></div>' + lines + '</div>';
+      }).join('');
 }
 
 async function setCfg(k, v) {
@@ -1003,6 +1081,6 @@ async function doReset() {
     var r = await rpc('admin_reset', { p_ses: S.session, p_token: S.token });
     if (!r.ok) { toast(r.msg || '실패했습니다.'); return; }
     toast('참가자 ' + r.removed + '명의 기록을 지웠습니다.');
-    renderAdmin();
+    loadAdminData();
   } catch (e) { toast('실패했습니다.'); }
 }
