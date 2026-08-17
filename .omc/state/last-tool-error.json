@@ -1,7 +1,0 @@
-{
-  "tool_name": "PowerShell",
-  "tool_input_preview": "{\"command\":\"Set-Location \\\"G:\\\\강의 관련\\\\2026.07.25. 지학사 강의\\\\활동지-supabase\\\"; node supabase/verify.mjs 2>&1 | Select-Object -First 30\",\"description\":\"Run schema verification\"}",
-  "error": "Exit code 1\n점검 대상: https://wzvcienycrebfpqjpwzv.supabase.co \r\n\r\n통과 3 / 실패 9\r\n\r\n  ✓ 테이블 ox_questions 차단\r\n  ✓ 테이블 ox_panel 차단\r\n  ✓ 테이블 admin_tokens 차단\r\n\r\n  ✗ 테이블 participants 읽기 — HTTP 404 {\"code\":\"PGRST205\",\"details\":null,\"hint\":null,\"message\":\"Could not find the table 'public.participants' in the schema ca\r\n  ✗ 테이블 ox_responses 읽기 — HTTP 404 {\"code\":\"PGRST205\",\"details\":null,\"hint\":null,\"message\":\"Could not find the table 'public.ox_responses' in the schema ca\r\n  ✗ 테이블 practice_responses 읽기 — HT...",
-  "timestamp": "2026-08-17T23:07:03.811Z",
-  "retry_count": 1
-}
