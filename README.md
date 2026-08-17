@@ -3,8 +3,17 @@
 Apps Script 판을 **Supabase(백엔드) + GitHub Pages(배포)** 로 다시 만든 것입니다.
 활동 내용·문항·디자인은 원본 그대로 두고, 실시간과 진행 제어만 새로 만들었습니다.
 
-- 참가자 화면 · `index.html`
-- 실시간 현황판 (모니터 투사용) · `board.html`
+**주소**
+
+| 용도 | 주소 |
+|---|---|
+| 선생님들에게 안내할 주소 | https://pblsketch.github.io/jihaksa-2026/ |
+| 모니터에 띄울 현황판 | https://pblsketch.github.io/jihaksa-2026/board.html?ses=0822 |
+| 관리자 | 위 참가자 주소에서 이름 칸에 **`박준일0822`** |
+
+> **지금 상태** — 리허설용 가짜 데이터 12명분이 들어 있고 과제 4개가 모두 열려 있습니다.
+> 눈으로 확인해 보신 뒤, **8월 22일 전에 관리자 화면 → 「응답 모두 비우기」** 를 눌러 주세요.
+> 그러면 참가자 기록이 지워지고, 과제는 다시 하나씩 열면 됩니다.
 
 ---
 
@@ -24,27 +33,32 @@ Apps Script에서 실시간이 안 됐던 건 설정 문제가 아니라 구조 
 
 ## 2. 설치 — 딱 한 번만 하면 됩니다
 
-### ① Supabase 스키마 적용
+**셋 다 이미 끝나 있습니다.** 아래는 나중에 다시 만들 일이 생겼을 때를 위한 기록입니다.
 
-1. https://supabase.com/dashboard/project/wzvcienycrebfpqjpwzv 접속
-2. 왼쪽 메뉴 **SQL Editor** → **New query**
-3. `supabase/schema.sql` 파일 내용을 **통째로** 붙여넣고 **Run**
-4. `Success. No rows returned` 가 나오면 끝입니다
+### ① Supabase 스키마 — 적용 완료
 
-> ⚠ 이 SQL은 다시 실행하면 **응답이 모두 지워집니다.** 연수 당일에는 절대 다시 실행하지 마세요.
+`supabase/schema.sql` 을 SQL Editor에 붙여넣고 Run 하면 됩니다.
+Personal Access Token이 있으면 명령으로도 됩니다.
+
+```bash
+SUPABASE_PAT=sbp_... node supabase/apply.mjs
+node supabase/verify.mjs     # 15개 항목 점검
+node supabase/e2e.mjs        # 서버 로직 44개 항목 검증 (끝나면 기록을 지웁니다)
+node supabase/e2e.mjs --seed # 현황판 확인용 12명분 가짜 데이터 생성
+```
+
+> ⚠ `schema.sql` 은 다시 실행하면 **응답이 모두 지워집니다.** 연수 당일에는 절대 다시 실행하지 마세요.
 > 리허설 기록만 지우려면 관리자 화면의 「응답 모두 비우기」를 쓰세요.
 
-### ② Realtime 확인
+### ② Realtime — 켜짐 확인 완료
 
-스키마 SQL이 Realtime 설정까지 함께 켭니다. 확인하려면
-**Database → Replication → `supabase_realtime`** 에 아래 5개가 들어 있으면 됩니다.
-
+**Database → Replication → `supabase_realtime`** 에 5개가 들어 있습니다.
 `participants` · `ox_responses` · `practice_responses` · `sentences` · `settings`
 
-### ③ 배포
+### ③ 배포 — GitHub Pages 완료
 
-이 폴더를 GitHub 저장소에 올리고 **Settings → Pages → Source: `main` / `root`** 로 켜면 끝입니다.
-빌드 과정이 없는 순수 정적 파일이라 그대로 올라갑니다.
+저장소 `pblsketch/jihaksa-2026`, `main` 브랜치 루트. `git push` 하면 1분 안에 반영됩니다.
+자산 주소에 `?v=2` 가 붙어 있으니, 고친 뒤에도 옛 파일이 뜨면 `index.html`·`board.html` 의 숫자를 올리세요.
 
 ---
 
