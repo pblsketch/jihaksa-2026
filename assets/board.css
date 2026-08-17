@@ -141,7 +141,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;color:inhe
   padding:12px 18px;display:flex;align-items:center;gap:16px;overflow:hidden;
 }
 .memos .lb{font-size:12px;font-weight:800;color:var(--blue);flex:none;letter-spacing:.05em}
-.memos .track{flex:1;min-width:0;display:flex;gap:26px;font-size:14.5px;color:var(--ink);white-space:nowrap;
+.memos .win{flex:1;min-width:0;overflow:hidden}          /* 라벨 위로 글자가 넘어오지 않게 */
+.memos .track{display:flex;gap:26px;font-size:14.5px;color:var(--ink);white-space:nowrap;width:max-content;
   animation:tick 42s linear infinite}
 .memos .track b{color:var(--ink-soft);font-weight:600;font-size:12.5px;margin-right:5px}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}

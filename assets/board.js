@@ -308,11 +308,11 @@ async function renderPractice(code) {
         '<span class="sw"><b style="background:var(--amber)"></b>「판단 갈림」 = 가장 의견이 갈린 활동 — 여기를 이야기 소재로</span>' +
       '</div>' +
       (memos.length ?
-        '<div class="memos"><div class="lb">배움을 지키는 장치</div><div class="track">' +
+        '<div class="memos"><div class="lb">배움을 지키는 장치</div><div class="win"><div class="track">' +
           [0, 1].map(function () {
             return memos.map(function (m) { return '<span><b>' + esc(m.name) + '</b>' + esc(m.memo) + '</span>'; }).join('');
           }).join('') +
-        '</div></div>' : '') +
+        '</div></div></div>' : '') +
     '</div>';
 }
 
