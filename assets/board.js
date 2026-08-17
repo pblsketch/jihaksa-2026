@@ -242,11 +242,25 @@ async function renderPractice(code) {
 
   var stages = window.AI_STAGES;
 
-  var rowsHtml = def.items.map(function (it) {
+  // 「판단 갈림」은 드물어야 눈에 띕니다.
+  // 5명 이상이 답했고 · 최다 단계가 과반에 한참 못 미치는 활동 중 · 가장 갈린 3개만 표시합니다.
+  var stat = def.items.map(function (it) {
     var a = agg[it.no];
     var tot = stages.reduce(function (s, x) { return s + a.stage[x.n]; }, 0);
     var max = stages.reduce(function (s, x) { return Math.max(s, a.stage[x.n]); }, 0);
-    var split = tot >= 3 && (max / tot) < 0.5;
+    var used = stages.filter(function (x) { return a.stage[x.n] > 0; }).length;
+    return { no: it.no, tot: tot, share: tot ? max / tot : 1, used: used };
+  });
+  var splitSet = {};
+  stat.filter(function (s) { return s.tot >= 5 && s.share < 0.45 && s.used >= 3; })
+      .sort(function (p, q) { return (p.share - q.share) || (q.used - p.used); })
+      .slice(0, 3)
+      .forEach(function (s) { splitSet[s.no] = true; });
+
+  var rowsHtml = def.items.map(function (it) {
+    var a = agg[it.no];
+    var max = stages.reduce(function (s, x) { return Math.max(s, a.stage[x.n]); }, 0);
+    var split = !!splitSet[it.no];
 
     var cells = stages.map(function (x) {
       var c = a.stage[x.n];
@@ -280,18 +294,18 @@ async function renderPractice(code) {
 
   st.innerHTML =
     '<div class="hm">' +
-      '<table class="hmtable">' +
+      '<div class="hmscroll"><table class="hmtable">' +
         '<tr><th class="act">교과서 활동</th>' +
           stages.map(function (x) { return '<th>' + x.n + '단계<br><span style="font-weight:400;font-size:11.5px">' + esc(x.name) + '</span></th>'; }).join('') +
           '<th class="risk">외주화 위험</th></tr>' +
         rowsHtml +
-      '</table>' +
+      '</table></div>' +
       '<div class="hmlegend">' +
         '<span>칸 안 숫자 = 그 단계를 고른 선생님 수 · 색이 진할수록 몰린 것</span>' +
         '<span class="sw"><b style="background:var(--red)"></b>위험 상</span>' +
         '<span class="sw"><b style="background:var(--amber)"></b>중</span>' +
         '<span class="sw"><b style="background:var(--green)"></b>하</span>' +
-        '<span class="sw"><b style="background:var(--amber)"></b>「판단 갈림」 = 과반이 없는 활동 — 여기를 이야기 소재로</span>' +
+        '<span class="sw"><b style="background:var(--amber)"></b>「판단 갈림」 = 가장 의견이 갈린 활동 — 여기를 이야기 소재로</span>' +
       '</div>' +
       (memos.length ?
         '<div class="memos"><div class="lb">배움을 지키는 장치</div><div class="track">' +
@@ -328,18 +342,26 @@ async function renderSentences() {
     return;
   }
 
+  // 「처음 본 시각」을 기록해 두고 10초 동안 강조합니다.
+  // 한 번 본 것을 지우는 방식으로 하면, 뒤따라 오는 다른 테이블의 변경으로 다시 그려질 때
+  // 강조가 곧바로 사라져 버립니다.
+  var now = Date.now();
   var first = B.firstSentencePaint;
   var html = feed.map(function (f) {
-    var fresh = !first && !B.seenSentences[f.id];
-    B.seenSentences[f.id] = true;
+    if (B.seenSentences[f.id] == null) B.seenSentences[f.id] = first ? 0 : now;
+    var fresh = B.seenSentences[f.id] > 0 && (now - B.seenSentences[f.id]) < 10000;
     return '<div class="sncard' + (fresh ? ' fresh' : '') + '">' +
       '<div class="nm">' + esc(f.name) + '</div>' +
       '<div class="tx">' + esc(s.before) + ' <b>' + esc(f.body) + '</b> ' + esc(s.after) + '</div>' +
       '</div>';
   }).join('');
-  if (first) { feed.forEach(function (f) { B.seenSentences[f.id] = true; }); B.firstSentencePaint = false; }
+  B.firstSentencePaint = false;
 
   st.innerHTML = '<div class="snwrap">' + html + '</div>';
+
+  // 강조가 저절로 걷히도록 한 번 더 그려 줍니다
+  clearTimeout(B._freshTimer);
+  B._freshTimer = setTimeout(function () { if (B.view === 'sn') renderSentences(); }, 10200);
 }
 
 /* ═══════ ⑤ 제출 현황판 ═══════ */

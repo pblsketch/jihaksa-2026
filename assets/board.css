@@ -102,8 +102,10 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;color:inhe
 .no{color:var(--red);font-weight:800}
 
 /* ═══════ ②③ 실습 히트맵 ═══════ */
-.hm{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0}
+.hm{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0}
+.hmscroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden}
 .hmtable{width:100%;border-collapse:separate;border-spacing:0 6px;table-layout:fixed}
+.hmtable tr:first-child th{position:sticky;top:0;background:var(--paper);z-index:2;padding-top:2px}
 .hmtable th{font-size:13px;color:var(--ink-soft);font-weight:700;padding:0 4px 6px;text-align:center}
 .hmtable th.act{text-align:left;width:32%;padding-left:14px}
 .hmtable th.risk{width:13%}
@@ -130,7 +132,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;color:inhe
 .riskbar i{display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;transition:width .5s}
 .riskbar .h{background:var(--red)} .riskbar .m{background:var(--amber)} .riskbar .l{background:var(--green)}
 
-.hmlegend{flex:none;display:flex;align-items:center;gap:18px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap}
+.hmlegend{flex:none;display:flex;align-items:center;gap:18px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;row-gap:6px}
 .hmlegend .sw{display:inline-flex;align-items:center;gap:6px}
 .hmlegend .sw b{width:14px;height:14px;border-radius:4px;display:inline-block}
 
