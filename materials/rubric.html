@@ -1,0 +1,1474 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 활용 수업 설계와 사례 검토를 위한 루브릭을 교사에게 소개하고, OSPI·OECD·UNESCO 근거 자료와 학교 현장 활용 방법을 안내하는 문서">
+  <title>AI 활용 수업 설계와 사례 검토를 위한 루브릭 | 교사용 안내</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --paper: #eef1ee;
+      --paper-deep: #e2e7e0;
+      --paper-card: #f7f9f6;
+      --ink: #1e2a44;
+      --ink-soft: #47536a;
+      --ink-faint: #7c879a;
+      --line: #c7cec6;
+      --line-strong: #aab3a6;
+      --navy: #1e2a44;
+      --teal: #2f7d75;
+      --teal-soft: #e5efeb;
+      --blue-soft: #e7edf1;
+      --amber: #a7672a;
+      --amber-soft: #f4eadb;
+      --coral: #a63a2f;
+      --coral-soft: #f1e0da;
+      --seal: #a63a2f;
+      --seal-soft: #f1e0da;
+      --seal-line: #c98f83;
+      --shadow: 0 12px 26px rgba(30, 42, 68, 0.05);
+      --radius-lg: 2px;
+      --radius-md: 2px;
+      --radius-sm: 2px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 32rem),
+        var(--paper);
+      font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--teal); text-underline-offset: 3px; }
+    a:hover { color: var(--seal); }
+    .page { overflow: hidden; }
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+
+    .topbar {
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--line-strong);
+      background: rgba(238, 241, 238, 0.94);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      background: var(--ink);
+      font-family: "Noto Serif KR", "Batang", serif;
+      font-size: 12px;
+      box-shadow: none;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .nav a:hover { color: var(--seal); }
+
+    .hero { padding: 82px 0 68px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+      align-items: end;
+      gap: 48px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      color: var(--seal);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--seal);
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 {
+      font-family: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+      text-wrap: balance;
+      font-weight: 700;
+    }
+    h1 {
+      max-width: 720px;
+      margin-bottom: 22px;
+      color: var(--ink);
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      word-break: keep-all;
+    }
+    .hero-lead {
+      max-width: 700px;
+      margin-bottom: 26px;
+      color: var(--ink-soft);
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.65;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+    .hero-note {
+      position: relative;
+      padding: 30px 30px 28px;
+      border: 1px solid var(--seal-line);
+      border-top: 3px solid var(--seal);
+      border-radius: var(--radius-lg);
+      background: var(--seal-soft);
+      box-shadow: none;
+    }
+    .hero-note::before {
+      content: "핵심 관점";
+      display: block;
+      margin-bottom: 16px;
+      color: var(--seal);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .hero-note p {
+      margin-bottom: 14px;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.48;
+      letter-spacing: -0.025em;
+      word-break: keep-all;
+    }
+    .hero-note small { color: var(--ink-soft); font-size: 13px; }
+
+    .section { padding: 70px 0; }
+    .section + .section { padding-top: 32px; }
+    .section-heading { max-width: 770px; margin-bottom: 30px; }
+    .section-kicker {
+      margin-bottom: 8px;
+      color: var(--seal);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin-bottom: 12px;
+      color: var(--ink);
+      font-size: clamp(28px, 3.2vw, 42px);
+      line-height: 1.22;
+      letter-spacing: -0.025em;
+      word-break: keep-all;
+    }
+    .section-heading > p {
+      margin-bottom: 0;
+      color: var(--ink-faint);
+      font-size: 16px;
+      word-break: keep-all;
+    }
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .info-card, .practice-card, .source-card {
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      border-top: 3px solid var(--ink);
+      background: var(--paper-card);
+      box-shadow: none;
+    }
+    .number {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 18px;
+      border: 1px solid var(--seal-line);
+      border-radius: 50%;
+      color: var(--seal);
+      background: var(--paper);
+      font-family: "Noto Serif KR", "Batang", serif;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    h3 {
+      margin-bottom: 9px;
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: -0.035em;
+      word-break: keep-all;
+    }
+    .info-card p, .practice-card p, .source-card p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+
+    .rubric-section {
+      padding: 80px 0 88px;
+      background: var(--paper-card);
+      border-top: 3px double var(--ink);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .rubric-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .rubric-header .section-heading { margin-bottom: 0; }
+    .table-tip {
+      flex: 0 0 auto;
+      max-width: 260px;
+      padding: 13px 16px;
+      border: 1px solid var(--seal-line);
+      border-left: 3px solid var(--seal);
+      color: #70483f;
+      background: var(--amber-soft);
+      font-size: 13px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      background: var(--paper-card);
+      box-shadow: none;
+    }
+    .rubric-table {
+      width: 100%;
+      min-width: 1080px;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+    .rubric-table col.criterion { width: 18%; }
+    .rubric-table col.level { width: 20.5%; }
+    .rubric-table th, .rubric-table td {
+      padding: 18px 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      word-break: keep-all;
+    }
+    .rubric-table tr > *:last-child { border-right: 0; }
+    .rubric-table tbody tr:last-child > * { border-bottom: 0; }
+    .rubric-table thead th {
+      position: static;
+      color: #fff;
+      background: var(--ink);
+      font-family: "Noto Serif KR", "Batang", serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .rubric-table thead th:first-child {
+      text-align: left;
+      border-top-left-radius: 17px;
+    }
+    .rubric-table thead th:last-child { border-top-right-radius: 17px; }
+    .rubric-table thead th.level-4 { background: var(--teal); }
+    .rubric-table thead th.level-3 { background: #527889; }
+    .rubric-table thead th.level-2 { background: #b2773a; }
+    .rubric-table thead th.level-1 { background: var(--seal); }
+    .rubric-table tbody th {
+      color: var(--ink);
+      background: #e6ece8;
+      font-family: "Noto Serif KR", "Batang", serif;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+    .rubric-table tbody td { color: var(--ink-soft); line-height: 1.8; }
+    .rubric-table tbody tr:nth-child(even) td { background: #fbfcfa; }
+    .level-marker {
+      display: inline-grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      margin-right: 6px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 12px;
+      vertical-align: -2px;
+    }
+    .level-4 .level-marker { background: var(--teal); }
+    .level-3 .level-marker { background: #527889; }
+    .level-2 .level-marker { background: #b2773a; }
+    .level-1 .level-marker { background: var(--seal); }
+    .rubric-record {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 18px 20px;
+      border: 1px solid var(--seal-line);
+      border-left: 3px solid var(--seal);
+      border-radius: var(--radius-md);
+      color: var(--ink-soft);
+      background: var(--seal-soft);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+    .record-icon {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--seal-line);
+      border-radius: 50%;
+      color: var(--seal);
+      background: var(--paper-card);
+      font-weight: 900;
+    }
+
+    .evidence-note {
+      margin: 12px 0 28px;
+      padding: 20px 22px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      background: var(--paper-deep);
+      color: var(--ink-soft);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+    .evidence-note strong { color: var(--ink); }
+    .mapping-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .mapping-card {
+      padding: 24px 25px 25px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--ink);
+      border-radius: var(--radius-md);
+      background: var(--paper-card);
+      box-shadow: none;
+    }
+    .mapping-card h3 { margin-bottom: 14px; }
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+    .source-tag {
+      display: inline-flex;
+      padding: 3px 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm);
+      color: var(--teal);
+      background: var(--teal-soft);
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .source-tag.oecd { color: #3e6575; background: var(--blue-soft); }
+    .source-tag.unesco { color: #875c2c; background: var(--amber-soft); }
+    .mapping-label {
+      margin: 0 0 4px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .mapping-card p {
+      margin-bottom: 13px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+    .mapping-card p:last-child { margin-bottom: 0; }
+    .page-ref {
+      color: var(--ink-faint);
+      font-size: 12px !important;
+    }
+
+    .practice-band {
+      padding: 78px 0 86px;
+      background: var(--paper-deep);
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .practice-band h2 { color: var(--ink); }
+    .practice-band .section-heading > p { color: var(--ink-faint); }
+    .practice-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .practice-card {
+      border-color: var(--line);
+      border-top-color: var(--seal);
+      background: var(--paper-card);
+      box-shadow: none;
+    }
+    .practice-card .number {
+      border-color: var(--seal-line);
+      color: var(--seal);
+      background: var(--paper);
+    }
+    .practice-card h3 { color: var(--ink); }
+    .practice-card p { color: var(--ink-soft); }
+    .practice-card ul {
+      margin: 16px 0 0;
+      padding-left: 19px;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+    .practice-card li + li { margin-top: 6px; }
+    .meeting-box {
+      margin-top: 18px;
+      padding: 24px 26px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      background: var(--paper-card);
+    }
+    .meeting-box h3 { margin-bottom: 13px; color: var(--ink); }
+    .meeting-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: meeting;
+    }
+    .meeting-list li {
+      position: relative;
+      min-height: 80px;
+      padding: 31px 11px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.45;
+      word-break: keep-all;
+    }
+    .meeting-list li::before {
+      counter-increment: meeting;
+      content: counter(meeting, decimal-leading-zero);
+      position: absolute;
+      top: 8px;
+      left: 11px;
+      color: var(--seal);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .practice-footnote {
+      margin: 22px 0 0;
+      color: var(--ink-faint);
+      font-size: 12px;
+      word-break: keep-all;
+    }
+
+    .record-section { padding-bottom: 72px; }
+    .record-layout {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .record-panel {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--paper-card);
+      box-shadow: none;
+    }
+    .record-panel.accent {
+      border-color: var(--seal-line);
+      border-top: 3px solid var(--seal);
+      background: var(--seal-soft);
+    }
+    .record-panel h3 { margin-bottom: 12px; }
+    .record-panel p {
+      margin-bottom: 0;
+      color: var(--ink-soft);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+    .record-fields {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .record-field {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      background: var(--paper-deep);
+      font-size: 13px;
+    }
+    .record-field strong { color: var(--seal); }
+    .record-field span { color: var(--ink-soft); }
+
+    .sources-section {
+      padding: 70px 0 76px;
+      border-top: 1px solid var(--line);
+      background: var(--paper-card);
+    }
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .source-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 238px;
+    }
+    .source-card .source-tag { align-self: flex-start; margin-bottom: 15px; }
+    .source-card h3 { margin-bottom: 9px; }
+    .source-card p { flex: 1; }
+    .source-card .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 20px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .disclaimer {
+      margin-top: 20px;
+      padding: 17px 20px;
+      border: 1px solid #eadfc5;
+      border-radius: var(--radius-md);
+      color: #70483f;
+      background: var(--amber-soft);
+      font-size: 13px;
+      word-break: keep-all;
+    }
+    .footer {
+      padding: 28px 0 42px;
+      color: var(--ink-faint);
+      background: var(--paper-deep);
+      font-size: 12px;
+    }
+    .footer p { margin-bottom: 0; }
+
+    @media (max-width: 880px) {
+      .hero-grid, .record-layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 56px; }
+      .hero-note { max-width: 620px; }
+      .intro-grid, .practice-grid, .source-grid { grid-template-columns: 1fr; }
+      .mapping-grid { grid-template-columns: 1fr; }
+      .meeting-list { grid-template-columns: repeat(2, 1fr); }
+      .rubric-header { align-items: flex-start; flex-direction: column; }
+      .table-tip { max-width: none; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(100% - 28px, 1160px); }
+      .topbar-inner { min-height: 58px; }
+      .nav { gap: 10px; font-size: 11px; }
+      .nav a:nth-child(n+2) { display: none; }
+      .brand { font-size: 13px; }
+      .hero { padding: 46px 0 42px; }
+      .hero-grid > * { min-width: 0; }
+      h1 { max-width: 100%; font-size: 34px; overflow-wrap: anywhere; }
+      .hero-lead { max-width: 100%; font-size: 17px; overflow-wrap: anywhere; }
+      .hero-note { padding: 24px; }
+      .hero-note { width: 100%; }
+      .hero-note p, .hero-note small { overflow-wrap: anywhere; }
+      .hero-note p { font-size: 19px; }
+      .section, .rubric-section, .practice-band, .sources-section { padding-top: 48px; padding-bottom: 54px; }
+      .info-card, .mapping-card, .practice-card, .record-panel, .source-card { padding: 21px; }
+      .meeting-list { grid-template-columns: 1fr; }
+      .rubric-table { min-width: 900px; }
+      .rubric-table th, .rubric-table td { padding: 15px 12px; }
+    }
+    @media print {
+      .topbar { position: static; }
+      .nav { display: none; }
+      body { background: #fff; }
+      .hero, .section, .rubric-section, .practice-band, .sources-section { padding: 25px 0; }
+      .hero-grid, .intro-grid, .mapping-grid, .practice-grid, .source-grid, .record-layout { gap: 10px; }
+      .hero-note, .info-card, .mapping-card, .practice-card, .record-panel, .source-card, .table-wrap { box-shadow: none; }
+      .rubric-table thead th { position: static; }
+      .practice-band { color: #172b3a; background: #fff; }
+      .practice-band h2, .practice-card h3 { color: var(--navy); }
+      .practice-band .section-heading > p, .practice-card p, .practice-card ul { color: #425767; }
+      .practice-card { border-color: var(--line); background: #fff; }
+    }
+  </style>
+  <style id="effective-html-direction">
+    :root {
+      --canvas: #edf1f4;
+      --paper: #fbfcfa;
+      --ink: #101827;
+      --muted: #5c6977;
+      --line: #c8d0d8;
+      --blue: #4267d8;
+      --marker: #d9f04b;
+      --coral: #f06a5b;
+      --night-soft: #1a2639;
+      --shadow: 0 18px 40px rgba(16, 24, 39, 0.09);
+      --square: 3px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "SUIT", "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+    }
+    a { color: var(--blue); text-underline-offset: 3px; }
+    a:hover { color: var(--coral); }
+    a:focus-visible, button:focus-visible { outline: 3px solid var(--marker); outline-offset: 3px; }
+    .page { overflow: hidden; }
+    .container { width: min(1180px, calc(100% - 44px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      color: #fff;
+      background: var(--ink);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .topbar-inner {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #fff;
+      font-weight: 900;
+      text-decoration: none;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: var(--ink);
+      background: var(--marker);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 1000;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .nav a { color: rgba(255, 255, 255, 0.7); text-decoration: none; }
+    .nav a:hover { color: var(--marker); }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 {
+      color: var(--ink);
+      font-weight: 950;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+    h1 { font-size: clamp(42px, 5vw, 66px); line-height: 1.06; }
+    h2 { font-size: clamp(30px, 3.8vw, 50px); line-height: 1.12; }
+    h3 { font-size: 20px; line-height: 1.3; }
+
+    .hero {
+      position: relative;
+      padding: 92px 0 86px;
+      color: #fff;
+      background-color: var(--ink);
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: var(--marker);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      align-items: end;
+      gap: 58px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 22px;
+      color: var(--marker);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 30px;
+      height: 3px;
+      background: var(--marker);
+    }
+    .hero h1 { max-width: 820px; margin-bottom: 24px; color: #fff; }
+    .hero-lead {
+      max-width: 650px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.68;
+      letter-spacing: -0.035em;
+      word-break: keep-all;
+    }
+    .hero-note {
+      position: relative;
+      padding: 30px 30px 28px;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-left: 8px solid var(--marker);
+      border-radius: var(--square);
+      box-shadow: var(--shadow);
+    }
+    .hero-note::before {
+      content: "검토의 출발점";
+      display: block;
+      margin-bottom: 18px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-note p {
+      margin-bottom: 15px;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 950;
+      line-height: 1.4;
+      letter-spacing: -0.055em;
+      word-break: keep-all;
+    }
+    .hero-note small { color: var(--muted); font-size: 12px; line-height: 1.65; }
+
+    .section { padding: 78px 0; background: var(--canvas); }
+    .section + .section { padding-top: 32px; }
+    .section-heading { max-width: 760px; margin-bottom: 34px; }
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 13px;
+      padding: 2px 8px 3px;
+      color: var(--ink);
+      background: var(--marker);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      line-height: 1.3;
+      text-transform: uppercase;
+    }
+    .section-heading h2 { margin-bottom: 14px; }
+    .section-heading > p { max-width: 65ch; margin-bottom: 0; color: var(--muted); font-size: 16px; word-break: keep-all; }
+
+    .intro-grid, .practice-grid, .source-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); }
+    .info-card, .practice-card, .source-card {
+      padding: 27px 25px;
+      border: 0;
+      border-radius: 0;
+      background: var(--paper);
+      box-shadow: none;
+    }
+    .info-card { min-height: 214px; }
+    .number {
+      display: block;
+      width: fit-content;
+      margin-bottom: 34px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+    .info-card h3, .practice-card h3, .source-card h3 { margin-bottom: 11px; }
+    .info-card p, .practice-card p, .source-card p { margin-bottom: 0; color: var(--muted); font-size: 14px; word-break: keep-all; }
+
+    .rubric-section {
+      padding: 86px 0 92px;
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .rubric-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+    .rubric-header .section-heading { margin-bottom: 0; }
+    .table-tip {
+      flex: 0 0 270px;
+      padding: 14px 16px;
+      color: var(--ink);
+      background: var(--marker);
+      border-left: 5px solid var(--ink);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .rubric-table {
+      width: 100%;
+      min-width: 1080px;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+      font-size: 13.5px;
+    }
+    .rubric-table col.criterion { width: 18%; }
+    .rubric-table col.level { width: 20.5%; }
+    .rubric-table th, .rubric-table td {
+      padding: 18px 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      word-break: keep-all;
+    }
+    .rubric-table tr > *:last-child { border-right: 0; }
+    .rubric-table tbody tr:last-child > * { border-bottom: 0; }
+    .rubric-table thead th {
+      position: static;
+      color: #fff;
+      background: var(--ink);
+      font-size: 14px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .rubric-table thead th:first-child { text-align: left; }
+    .rubric-table thead th.level-4 { color: var(--ink); background: var(--marker); }
+    .rubric-table thead th.level-3 { background: var(--blue); }
+    .rubric-table thead th.level-2 { color: var(--ink); background: #f2c24f; }
+    .rubric-table thead th.level-1 { background: var(--coral); }
+    .rubric-table tbody th {
+      color: var(--ink);
+      background: #e9eef3;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.55;
+    }
+    .rubric-table tbody td { color: var(--ink); line-height: 1.8; }
+    .rubric-table tbody tr:nth-child(even) td { background: #f5f8f8; }
+    .level-marker {
+      display: inline-grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      margin-right: 6px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      color: inherit;
+      font-size: 12px;
+      vertical-align: -2px;
+    }
+    .rubric-record {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 17px 19px;
+      color: var(--ink);
+      background: #e9f5a9;
+      border-left: 5px solid var(--marker);
+      border-radius: 0;
+      font-size: 14px;
+      font-weight: 750;
+      word-break: keep-all;
+    }
+    .record-icon {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 25px;
+      height: 25px;
+      color: var(--ink);
+      background: var(--marker);
+      border-radius: 50%;
+      font-weight: 950;
+    }
+
+    .evidence-note {
+      margin: 12px 0 28px;
+      padding: 19px 21px;
+      color: var(--muted);
+      background: #e9eef3;
+      border-left: 5px solid var(--blue);
+      font-size: 14px;
+      word-break: keep-all;
+    }
+    .evidence-note strong { color: var(--ink); }
+    .mapping-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .mapping-card {
+      padding: 25px 26px 27px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper);
+      box-shadow: none;
+    }
+    .mapping-card h3 { margin-bottom: 14px; }
+    .source-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 17px; }
+    .source-tag {
+      display: inline-flex;
+      padding: 3px 8px;
+      color: var(--ink);
+      background: var(--marker);
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .source-tag.oecd { color: #fff; background: var(--blue); border-color: var(--blue); }
+    .source-tag.unesco { color: var(--ink); background: #f2c24f; border-color: var(--ink); }
+    .mapping-label {
+      margin: 0 0 5px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .mapping-card p { margin-bottom: 14px; color: var(--muted); font-size: 14px; word-break: keep-all; }
+    .mapping-card p:last-child { margin-bottom: 0; }
+    .page-ref { color: #718092 !important; font-size: 12px !important; }
+
+    .practice-band {
+      padding: 82px 0 88px;
+      color: #fff;
+      background: var(--night-soft);
+      border-top: 8px solid var(--marker);
+    }
+    .practice-band h2 { color: #fff; }
+    .practice-band .section-heading > p.section-kicker { color: var(--ink); }
+    .practice-band .section-heading > p { color: rgba(255, 255, 255, 0.68); }
+    .practice-grid { background: rgba(255, 255, 255, 0.2); }
+    .practice-card { color: #fff; background: rgba(16, 24, 39, 0.38); }
+    .practice-card h3 { color: #fff; }
+    .practice-card p { color: rgba(255, 255, 255, 0.7); }
+    .practice-card .number { color: var(--marker); }
+    .practice-card ul { margin: 18px 0 0; padding-left: 19px; color: rgba(255, 255, 255, 0.8); font-size: 13px; }
+    .practice-card li + li { margin-top: 6px; }
+    .meeting-box { margin-top: 20px; padding: 24px 25px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.06); }
+    .meeting-box h3 { margin-bottom: 14px; color: #fff; }
+    .meeting-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; margin: 0; padding: 0; list-style: none; counter-reset: meeting; }
+    .meeting-list li { position: relative; min-height: 84px; padding: 31px 11px 10px; border: 1px solid rgba(255, 255, 255, 0.22); color: rgba(255, 255, 255, 0.74); font-size: 12px; line-height: 1.5; word-break: keep-all; }
+    .meeting-list li::before { counter-increment: meeting; content: counter(meeting, decimal-leading-zero); position: absolute; top: 8px; left: 11px; color: var(--marker); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 11px; font-weight: 900; }
+    .practice-footnote { margin: 22px 0 0; color: rgba(255, 255, 255, 0.52); font-size: 12px; word-break: keep-all; }
+
+    .record-section { background: var(--canvas); }
+    .record-layout { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 18px; align-items: stretch; }
+    .record-panel { padding: 28px; border: 1px solid var(--line); border-radius: 0; background: var(--paper); box-shadow: none; }
+    .record-panel.accent { border: 0; border-left: 7px solid var(--marker); background: var(--ink); }
+    .record-panel.accent h3, .record-panel.accent p { color: #fff; }
+    .record-panel h3 { margin-bottom: 12px; }
+    .record-panel p { margin-bottom: 0; color: var(--muted); font-size: 14px; word-break: keep-all; }
+    .record-fields { display: grid; gap: 9px; margin-top: 18px; }
+    .record-field { display: grid; grid-template-columns: 74px 1fr; gap: 10px; padding: 10px 12px; background: var(--night-soft); font-size: 13px; }
+    .record-field strong { color: var(--marker); }
+    .record-field span { color: rgba(255, 255, 255, 0.72); }
+
+    .sources-section { padding: 78px 0 84px; background: var(--paper); border-top: 1px solid var(--line); }
+    .source-card { display: flex; flex-direction: column; min-height: 238px; }
+    .source-card .source-tag { align-self: flex-start; margin-bottom: 16px; }
+    .source-card h3 { margin-bottom: 10px; }
+    .source-card p { flex: 1; }
+    .source-card .source-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 20px; font-size: 13px; font-weight: 900; }
+    .disclaimer { margin-top: 20px; padding: 17px 20px; color: var(--ink); background: #e9f5a9; border-left: 5px solid var(--marker); font-size: 13px; word-break: keep-all; }
+    .footer { padding: 28px 0 42px; color: rgba(255, 255, 255, 0.62); background: var(--ink); font-size: 12px; }
+    .footer p { margin-bottom: 0; }
+    .footer-credit { margin-left: 12px; color: var(--marker); font-weight: 800; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .record-layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 68px; }
+      .hero-note { max-width: 620px; }
+      .intro-grid, .practice-grid, .source-grid { grid-template-columns: 1fr; }
+      .mapping-grid { grid-template-columns: 1fr; }
+      .meeting-list { grid-template-columns: repeat(2, 1fr); }
+      .rubric-header { align-items: flex-start; flex-direction: column; }
+      .table-tip { flex-basis: auto; max-width: none; }
+    }
+    @media (max-width: 640px) {
+      .container { width: min(100% - 28px, 1180px); }
+      .topbar-inner { min-height: 58px; }
+      .nav { gap: 10px; font-size: 10px; }
+      .nav a:nth-child(n+2) { display: none; }
+      .brand { font-size: 13px; }
+      .hero { padding: 58px 0 62px; }
+      .hero::before { width: 5px; }
+      .hero-grid > * { min-width: 0; }
+      h1 { font-size: 42px; overflow-wrap: anywhere; }
+      .hero-lead { font-size: 17px; }
+      .hero-note { padding: 24px; }
+      .hero-note p { font-size: 19px; }
+      .section, .rubric-section, .practice-band, .sources-section { padding-top: 58px; padding-bottom: 64px; }
+      .info-card, .mapping-card, .practice-card, .record-panel, .source-card { padding: 22px; }
+      .meeting-list { grid-template-columns: 1fr; }
+      .rubric-table { min-width: 900px; }
+      .rubric-table th, .rubric-table td { padding: 15px 12px; }
+    }
+    @media print {
+      .topbar { position: static; }
+      .nav { display: none; }
+      body, .section, .rubric-section, .sources-section { background: #fff; }
+      .hero, .practice-band { color: #000; background: #fff; border: 0; }
+      .hero h1, .hero-lead, .practice-band h2, .practice-card h3, .practice-card p, .practice-card ul, .meeting-box h3, .meeting-list li, .practice-footnote { color: #000; }
+      .hero-note, .info-card, .mapping-card, .practice-card, .record-panel, .source-card, .table-wrap { box-shadow: none; }
+      .rubric-table thead th { position: static; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .practice-grid { background: #fff; }
+      .practice-card { border: 1px solid #999; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="#top" aria-label="문서 처음으로">
+          <span class="brand-mark">AI</span>
+          <span>수업 설계 안내</span>
+        </a>
+        <nav class="nav" aria-label="문서 내비게이션">
+          <a href="#start">시작하기</a>
+          <a href="#rubric">루브릭</a>
+          <a href="#evidence">근거 연결</a>
+          <a href="#field">현장 활용</a>
+          <a href="#sources">참고자료</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">교사 안내 자료</p>
+            <h1>AI 활용 수업 설계와<br>사례 검토를 위한 루브릭</h1>
+            <p class="hero-lead">AI 활용 수업을 설계하고 실천하는 선생님들이 수업안과 수업 사례를 점검할 수 있도록 만든 자료입니다. 학습목표, 학생의 활동과 판단, 학습 증거, AI의 역할이 서로 맞물려 있는지 살펴봅니다.</p>
+          </div>
+          <aside class="hero-note">
+            <p>AI 활용 수업에서는<br>학생의 배움이 수업 과정에 드러나야 합니다.</p>
+            <small>OSPI·OECD·UNESCO의 논의를 바탕으로 8개 준거를 구성하고, 수업안 검토와 수업 사례 분석에 활용하는 방법을 정리했습니다.</small>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="start">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">사용하기 전에</p>
+            <h2>이 루브릭으로 확인할 점</h2>
+            <p>AI 활용 수업을 준비할 때와 수업 사례를 돌아볼 때, 아래 세 가지를 차례로 확인합니다.</p>
+          </div>
+          <div class="intro-grid">
+            <article class="info-card">
+              <span class="number">01</span>
+              <h3>수업의 흐름을 봅니다</h3>
+              <p>학습목표에서 활동과 평가까지 이어지는 흐름을 살핍니다. 학생의 판단과 학습 증거가 수업의 목표와 연결되어 있는지도 확인합니다.</p>
+            </article>
+            <article class="info-card">
+              <span class="number">02</span>
+              <h3>근거를 함께 적습니다</h3>
+              <p>수준을 정할 때에는 자료의 쪽수·문장·학생 산출물·수업 관찰처럼 다른 사람이 다시 확인할 수 있는 내용을 적습니다.</p>
+            </article>
+            <article class="info-card">
+              <span class="number">03</span>
+              <h3>다음 수업에 반영합니다</h3>
+              <p>각 준거에서 보완할 부분을 하나 골라 다음 수업의 활동, 발문, 기록 또는 평가 기준에 반영합니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="rubric-section" id="rubric">
+        <div class="container">
+          <div class="rubric-header">
+            <div class="section-heading">
+              <p class="section-kicker">루브릭 원문</p>
+              <h2>AI 활용 수업 설계 루브릭</h2>
+              <p>AI 활용 수업에서 학생의 실제 배움이 일어나도록 수업이 설계되어 있는지를 검토하는 공통 평가 도구입니다.</p>
+            </div>
+            <div class="table-tip">각 준거에 해당하는 수업 장면과 근거를 먼저 확인하고, 그에 맞는 수준을 기록하세요.</div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="rubric-table">
+              <colgroup>
+                <col class="criterion">
+                <col class="level">
+                <col class="level">
+                <col class="level">
+                <col class="level">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col">준거</th>
+                  <th scope="col" class="level-4"><span class="level-marker">4</span>수준</th>
+                  <th scope="col" class="level-3"><span class="level-marker">3</span>수준</th>
+                  <th scope="col" class="level-2"><span class="level-marker">2</span>수준</th>
+                  <th scope="col" class="level-1"><span class="level-marker">1</span>수준</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">학습목표와 학습 증거의 정합성</th>
+                  <td>학생이 AI를 활용하더라도 질문·선택·수정·근거 설명이 학습목표와 직접 연결되고, 대화 기록·초안·최종 수행에서 그 차이를 확인할 수 있다.</td>
+                  <td>목표와 활동은 연결되지만 학생의 배움을 확인할 증거나 성공 기준이 일부 불명확하다.</td>
+                  <td>목표는 있으나 활동과 직접 연결되지 않거나 관찰하기 어려운 표현으로 제시된다.</td>
+                  <td>활동·기술·결과물 제작이 중심이며 학생이 무엇을 배웠는지 확인하기 어렵다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">교과 학습의 깊이와 정합성</th>
+                  <td>교과 고유의 개념·기능·사고방식으로 AI의 답변·자료를 검토하고, 교과 근거로 오류나 오개념을 고쳐 설명하며 자신의 표현으로 재구성한다.</td>
+                  <td>교과 내용과 연결되지만 교과 고유의 사고나 개념 적용이 충분히 깊지 않다.</td>
+                  <td>교과 내용은 소재로만 사용되고 활동은 어느 교과에도 적용 가능한 일반 활동에 가깝다.</td>
+                  <td>교과 학습보다 도구 사용이나 결과물 제작이 중심이며 성취기준 연결이 약하다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">학생의 인지적 참여와 주도성</th>
+                  <td>학생이 AI에 던질 질문을 스스로 만들고, 생성된 답변을 비판·비교·반박·재질문하며 핵심 판단을 수행한다. 최종 선택의 근거를 학생이 말과 글로 설명한다.</td>
+                  <td>학생의 사고 활동이 있으나 일부 과정은 선택·복사·절차 수행에 머문다.</td>
+                  <td>학생은 자료나 도구 결과를 정리·완성하는 역할이 많고 자신의 판단 설명이 부족하다.</td>
+                  <td>교사나 도구가 대부분의 사고와 산출을 수행하며 학생은 수동적으로 반응한다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">학습 지원과 피드백의 질</th>
+                  <td>AI의 예시·피드백을 정답이 아닌 잠정적 도움으로 다루고, 교사의 발문과 자기 점검표를 거쳐 학생이 오류를 확인·수정한 과정이 기록된다.</td>
+                  <td>지원과 피드백이 있으나 주로 교사 설명이나 최종 결과 확인에 머문다.</td>
+                  <td>절차는 자세하지만 학생의 어려움에 따른 지원이나 피드백 루프가 거의 없다.</td>
+                  <td>학생이 막혔을 때의 지원과 피드백이 제시되어 있지 않다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">도구·AI의 교육적 역할</th>
+                  <td>AI의 역할이 아이디어 생성·질문·자료·학습목표에 필요한 기능으로 제한되고, 학생이 출처·오류·편향을 검수·판단한다. AI 없이 수행하는 대체 경로도 제시되어 있다.</td>
+                  <td>도구 기능과 활동은 연결되지만 도구의 필수성이나 한계가 충분히 설명되지 않는다.</td>
+                  <td>도구가 흥미·편의성·효율성은 높이지만 학습 강화 여부가 불분명하다.</td>
+                  <td>도구가 핵심 사고나 수행을 대신하며 오류·편향·출처·개인정보를 다루지 않는다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">평가의 타당성과 학습 증거</th>
+                  <td>평가 기준이 목표와 직접 연결되고, AI 사용 여부 자체가 아니라 초안·과정·근거·수정 과정을 확인하여 학생의 실제 이해를 판단한다.</td>
+                  <td>평가 기준은 대체로 연결되지만 최종 결과물 중심이다.</td>
+                  <td>완성도·분량·참여·도구 사용 여부가 학습보다 크게 평가된다.</td>
+                  <td>학생이 이해했다고 판단할 근거가 제시되어 있지 않다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">독립 수행과 전이</th>
+                  <td>수업에서 사용한 AI를 끄고 새로운 자료·문제를 제시해도 학생이 배운 개념을 적용하고, AI 답변에 의존하지 않고 판단 근거를 설명한다.</td>
+                  <td>독립 수행이나 적용 활동이 있으나 새로운 맥락으로의 전이는 제한적이다.</td>
+                  <td>수업 중 활동에서는 수행하지만 별도의 독립 적용 장면이 없다.</td>
+                  <td>실제로 이해했는지 확인할 독립 수행이나 전이 활동이 없다.</td>
+                </tr>
+                <tr>
+                  <th scope="row">형평성·윤리·실행 가능성</th>
+                  <td>계정·기기 접근 격차, 개인정보 입력 금지, 저작권·편향 점검, 연결 중단에 대비한 구체적 운영 방안을 안내하고, AI를 사용할 수 없는 학생을 위한 대체 경로도 마련한다.</td>
+                  <td>안전·형평성 요소를 일부 고려하지만 실행 조건이나 대체 경로가 부족하다.</td>
+                  <td>일반적인 안전 안내는 있으나 실제 대응 절차와 참여 장벽 조정이 부족하다.</td>
+                  <td>접근 격차나 개인정보·동의·실행 가능성 문제를 고려하지 않는다.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rubric-record">
+            <span class="record-icon">✓</span>
+            <span><strong>점검 기록: 각 준거의 수준을 선택하고, 반드시 자료의 쪽수·문장·관찰 근거를 함께 남기세요.</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="evidence">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">루브릭의 근거 자료</p>
+            <h2>근거 자료에서 8개 준거까지</h2>
+            <p>OSPI·OECD·UNESCO의 자료를 읽으며 확인한 수업 설계 원칙을 8개 준거로 묶었습니다. 각 준거에서 어떤 근거 자료를 참고했는지, 수업을 볼 때 어떤 장면을 확인하면 되는지 차례로 설명합니다.</p>
+          </div>
+          <div class="evidence-note"><strong>자료의 역할:</strong> OSPI·OECD·UNESCO는 각각 독립된 지침과 보고서입니다. 이 루브릭은 세 자료에서 확인한 인간 중심성, 학생 주도성, 과정 중심 평가, 형평성·안전 원칙을 수업 설계 장면에 맞춰 8개 준거로 정리한 도구입니다. 쪽수는 각 원문 PDF의 인쇄 쪽수 기준입니다.</div>
+
+          <div class="mapping-grid">
+            <article class="mapping-card">
+              <h3>1. 학습목표와 학습 증거의 정합성</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag oecd">OECD</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>수업안에 AI의 사용 목적이 구체적으로 드러나는지 살핍니다. 학생이 AI에 어떤 질문을 던지고, 답변 중 무엇을 선택·수정하며, 그 이유를 어디에서 설명할지까지 학습목표와 연결되어 있어야 합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI p. 12는 인간의 질문에서 시작해 AI 활용을 거친 뒤 인간의 성찰과 수정으로 이어지는 학습 흐름을 제안하고, pp. 37–38은 과제의 목표와 평가 기준을 맞추도록 안내합니다. OECD 2026 pp. 48–55는 학습 로그·과정 기록·산출물·메타인지 증거를 구분합니다. 이 항목은 목표·활동·학습 증거가 한 흐름으로 이어지는지 확인합니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>2. 교과 학습의 깊이와 정합성</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag unesco">UNESCO</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>AI의 답변을 교과의 개념과 근거로 검토하고, 오류나 오개념을 고친 뒤 자신의 표현으로 다시 구성하는 단계가 있는지 살핍니다. 활동의 중심에 해당 교과의 고유한 개념·기능·사고방식이 놓여 있는지도 확인합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 20, 25–27은 중·고등학교의 AI 출력 비판과 교과별 활용 사례를 제시합니다. UNESCO 2023 pp. 31–34는 AI를 사용할 영역과 학습성과를 먼저 정하고, 인간의 교수학습 방법이 중심에 남아 있어야 한다고 안내합니다. 이 원칙을 교과 고유의 개념·기능·사고방식에 적용한 항목입니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>3. 학생의 인지적 참여와 주도성</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag unesco">UNESCO</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>학생이 질문을 직접 만들고, AI의 답변을 비교·반박·재질문하는 장면을 확인합니다. 최종 선택과 그 근거를 학생의 말과 글로 설명할 수 있어야 합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 20–21은 AI의 답변을 살필 때 맥락, 빠진 내용, 맞고 틀린 세부를 묻는 질문을 제안합니다. UNESCO 2023 pp. 24–27은 인간의 주도성을 지키기 위해 AI의 방법·출력·교육 방식을 비판적으로 질문하고, 판단의 책임을 AI에 넘기지 않아야 한다고 설명합니다. 학생의 비판적 질문과 판단이 실제 활동에 나타나는지 보는 항목입니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>4. 학습 지원과 피드백의 질</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag oecd">OECD</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>AI의 예시와 피드백을 잠정적인 도움으로 다루고, 교사의 발문과 자기 점검을 거쳐 학생이 오류를 확인·수정하는지 봅니다. 그 과정이 기록으로 남는지도 확인합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 12, 37–40은 비계, 피드백, 성찰을 교사의 안내와 학생의 이해 확인에 연결합니다. OECD 2026 pp. 24–27은 AI 피드백에 사람의 검토를 결합하고, 교육적 설계가 도구보다 먼저 와야 한다고 설명합니다. 도움을 받은 뒤 학생의 생각과 수정이 어떻게 드러나는지 확인합니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>5. 도구·AI의 교육적 역할</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag unesco">UNESCO</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>AI가 맡는 일을 아이디어 생성, 질문, 자료 탐색처럼 필요한 기능으로 한정했는지 살핍니다. 학생이 출처·오류·편향을 확인하고, AI를 사용할 수 없을 때에도 같은 학습목표에 도달할 대체 경로가 있는지 확인합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 9–15는 생성형 AI를 무오류의 사실 출처나 학생 발달의 대체물로 다루지 말고, 개인정보·편향·과도한 의존을 관리해야 한다고 설명합니다. UNESCO 2023 pp. 23–27, 31–34는 인간의 주도성, 프라이버시, 적절한 사용 영역, 기술이 없는 대안을 함께 검토하도록 안내합니다. 수업안에 이런 판단이 구체적으로 담겼는지 봅니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>6. 평가의 타당성과 학습 증거</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag oecd">OECD</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>평가 기준이 학습목표와 연결되어 있는지 살핍니다. 초안·과정·근거·수정에서 학생의 이해와 판단을 확인할 수 있도록 평가 장면을 설계했는지 봅니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 12–15, 37–40은 과제별 AI 허용 범위를 분명히 하고, 학생의 과정과 이해를 확인하도록 안내합니다. OECD 2026 pp. 48–55는 산출물·과정·메타인지 증거를 구분하고, 과제·증거·판단을 연결하는 과정 중심 평가를 설명합니다. 평가 설계가 실제 학습을 판단할 수 있을 만큼 구체적인지 확인합니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>7. 독립 수행과 전이</h3>
+              <div class="source-tags"><span class="source-tag oecd">OECD</span><span class="source-tag unesco">UNESCO</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>수업에서 AI를 사용한 활동을 마친 뒤, 새로운 자료나 문제를 학생이 혼자 해결하는 장면을 마련했는지 봅니다. 그때 배운 개념을 적용하고 판단 근거를 설명하는지도 확인합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OECD 2026 pp. 51–57은 수행 결과와 실제 학습을 구분하고, 학습의 유지·전이와 자기조절을 평가할 필요를 설명합니다. UNESCO 2023 p. 39는 평가에서 독립적 사고와 비판적 사고를 지켜야 한다고 안내합니다. AI를 사용한 장면 밖에서도 학습이 이어지는지 확인합니다.</p>
+            </article>
+
+            <article class="mapping-card">
+              <h3>8. 형평성·윤리·실행 가능성</h3>
+              <div class="source-tags"><span class="source-tag">OSPI</span><span class="source-tag unesco">UNESCO</span></div>
+              <p class="mapping-label">수업에서 볼 장면</p>
+              <p>계정·기기 접근 격차, 개인정보 입력 금지, 저작권·편향 점검, 연결 중단에 대한 대응을 수업 운영안에 적었는지 살핍니다. AI를 사용할 수 없는 학생도 같은 학습에 참여할 대체 경로가 있는지 확인합니다.</p>
+              <p class="mapping-label">근거 자료의 설명</p>
+              <p class="page-ref">OSPI pp. 10–15, 33–38, 47–48은 형평성·안전·책임성 원칙과 개인정보, 접근성, 학교 정책·연수·대체 경로를 다룹니다. UNESCO 2023 pp. 2, 23–27, 30은 포용·형평성·프라이버시와 인간 중심의 제도적 조건을 강조합니다. 이런 조건이 실제 운영 절차로 준비되어 있는지 확인합니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="practice-band" id="field">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">학교에서 활용하기</p>
+            <h2>학교에서 활용하는 방법</h2>
+            <p>수업 전에는 설계의 빈틈을 찾습니다. 수업 중에는 학생의 과정을 기록하고, 수업이 끝난 뒤에는 다음 수업에서 바꿀 점을 정합니다.</p>
+          </div>
+          <div class="practice-grid">
+            <article class="practice-card">
+              <span class="number">01</span>
+              <h3>수업 전 · 설계 점검</h3>
+              <p>수업안이나 활동지를 함께 읽으며 학습목표와 AI의 역할을 먼저 확인합니다.</p>
+              <ul>
+                <li>학생이 무엇을 배우는가?</li>
+                <li>그 배움을 어떤 과정과 산출물로 확인하는가?</li>
+                <li>AI가 돕는 부분과 학생이 반드시 판단할 부분은 어디인가?</li>
+                <li>AI 없이 수행하는 대체 경로가 있는가?</li>
+              </ul>
+            </article>
+            <article class="practice-card">
+              <span class="number">02</span>
+              <h3>수업 중 · 과정 기록</h3>
+              <p>최종 결과물과 함께 학생의 사고가 드러나는 흔적도 모읍니다.</p>
+              <ul>
+                <li>학생이 만든 질문과 선택의 근거</li>
+                <li>AI 답변을 검토한 표시와 재질문</li>
+                <li>초안·수정본·자기 점검표</li>
+                <li>교사의 발문과 학생의 설명</li>
+              </ul>
+            </article>
+            <article class="practice-card">
+              <span class="number">03</span>
+              <h3>수업 후 · 사례 검토</h3>
+              <p>각 준거의 수준과 근거를 함께 기록하고, 다음 차시의 작은 변화를 정합니다.</p>
+              <ul>
+                <li>근거가 충분한 수준을 선택하기</li>
+                <li>자료의 쪽수·문장·관찰 내용을 남기기</li>
+                <li>새로운 문제에서 독립 수행 확인하기</li>
+                <li>다음 수업에서 바꿀 준거 하나 정하기</li>
+              </ul>
+            </article>
+          </div>
+          <div class="meeting-box">
+            <h3>교과 협의회에서 함께 확인할 질문</h3>
+            <ol class="meeting-list">
+              <li>이번 수업의 핵심 학습목표는 무엇인가?</li>
+              <li>학생의 배움을 확인할 증거는 무엇인가?</li>
+              <li>AI가 돕고 학생이 판단하는 경계는 어디인가?</li>
+              <li>AI를 사용할 수 없을 때의 대체 경로는 무엇인가?</li>
+              <li>다음 수업에서 바꿀 설계 요소는 무엇인가?</li>
+            </ol>
+          </div>
+          <p class="practice-footnote">이 순서로 루브릭을 수업 설계·동료 협의·수업 사례 성찰에 활용할 수 있습니다. 학교와 교육청의 개인정보·저작권·AI 사용 정책도 함께 확인하세요.</p>
+        </div>
+      </section>
+
+      <section class="section record-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">근거 기록</p>
+            <h2>판단 근거를 남깁니다</h2>
+            <p>수준을 정한 이유가 남도록 자료의 위치와 수업 장면을 함께 기록해 주세요.</p>
+          </div>
+          <div class="record-layout">
+            <article class="record-panel accent">
+              <h3>기록할 내용</h3>
+              <p>각 준거에 수준, 근거, 다음 질문을 함께 적습니다.</p>
+              <div class="record-fields">
+                <div class="record-field"><strong>수준</strong><span>예: 3수준</span></div>
+                <div class="record-field"><strong>근거</strong><span>자료 쪽수·문장 또는 수업 관찰 장면</span></div>
+                <div class="record-field"><strong>다음 질문</strong><span>학생의 판단을 더 잘 드러내려면 무엇을 바꿀까?</span></div>
+              </div>
+            </article>
+            <article class="record-panel">
+              <h3>활용할 수 있는 장면</h3>
+              <p>교사 개인의 자기 점검, 동료 교사의 수업안 검토, 공개수업 사후 협의, 학년·교과 단위의 AI 활용 원칙 정리에 사용할 수 있습니다. 수준을 정할 때에는 실제로 확인된 과정과 학생의 설명을 앞세웁니다.</p>
+              <p style="margin-top: 14px;">학생의 대화 기록이나 산출물을 수집할 때에는 학교의 개인정보·동의·보관 정책을 먼저 확인하고, 필요한 범위만 안전하게 기록합니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources-section" id="sources">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">참고 자료</p>
+            <h2>루브릭을 구성한 근거 자료</h2>
+            <p>아래 세 자료를 원문으로 확인했습니다. 안내문에 관련 쪽수를 표시했으며, 페이지 표기는 각 자료의 PDF 인쇄 쪽수 기준입니다.</p>
+          </div>
+          <div class="source-grid">
+            <article class="source-card">
+              <span class="source-tag">OSPI</span>
+              <h3>Human-Centered AI Guidance for K–12 Public Schools</h3>
+              <p>워싱턴주 공교육기관의 K–12 종합 AI 지침입니다. 인간 중심의 AI 활용, 형평성·안전·책임성, 학생의 비판적 검토, 교사의 설계와 지원을 다룹니다. Version 3.0, 2024.</p>
+              <a class="source-link" href="https://ospi.k12.wa.us/sites/default/files/2024-06/comprehensive-ai-guidance.pdf" target="_blank" rel="noopener noreferrer">원문 PDF 열기 ↗</a>
+            </article>
+            <article class="source-card">
+              <span class="source-tag oecd">OECD</span>
+              <h3>OECD Digital Education Outlook 2026</h3>
+              <p>디지털 교육 생태계와 생성형 AI를 포함한 교육의 변화, 학생 주도성, 교사의 역할, 과정 중심 평가와 형평성·안전 조건을 종합한 OECD 보고서입니다. 2026년 1월 19일 발행.</p>
+              <a class="source-link" href="https://www.oecd.org/en/publications/2026/01/oecd-digital-education-outlook-2026_940e0dd8.html" target="_blank" rel="noopener noreferrer">OECD 원문 페이지 열기 ↗</a>
+            </article>
+            <article class="source-card">
+              <span class="source-tag unesco">UNESCO</span>
+              <h3>Guidance for Generative AI in Education and Research</h3>
+              <p>생성형 AI를 교육과 연구에서 활용할 때의 인간 중심 접근, 포용·형평성, 개인정보, 연령 적합성, 비판적 사고와 독립적 사고 보호를 안내하는 UNESCO 지침입니다. 2023.</p>
+              <a class="source-link" href="https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research" target="_blank" rel="noopener noreferrer">UNESCO 원문 페이지 열기 ↗</a>
+            </article>
+          </div>
+          <div class="disclaimer"><strong>자료의 관계:</strong> 이 루브릭은 OSPI·OECD·UNESCO 자료를 읽고 구성한 별도의 도구입니다. 이 안내서는 각 근거 자료의 원칙·논의가 현재 루브릭의 8개 준거와 어떻게 연결되는지, 학교 현장에서 어떻게 활용할 수 있는지 설명합니다.</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>교사용 AI 활용 수업 설계 루브릭 안내 <span class="footer-credit">만든이: @pbl.junil</span></p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

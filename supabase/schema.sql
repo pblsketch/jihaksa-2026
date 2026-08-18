@@ -159,6 +159,12 @@ insert into public.materials (ses, kind, ord, title, descr, url) values
  'https://drive.google.com/drive/folders/170Y0R1AKGXnV0WacXZyIJVfFzdM2OWGW?usp=sharing'),
 ('0822', '자료', 1, '연수 자료 전체', '강의 원고 · 활동지 15종 · AI 활용 안내',
  'https://drive.google.com/drive/folders/170Y0R1AKGXnV0WacXZyIJVfFzdM2OWGW?usp=sharing'),
+('0822', '자료', 2, 'AI·에듀테크 9가지 교육적 목적',
+ '실습 2번째 칸이 막힐 때 · AI가 맡는 일이 목적인가 수단인가',
+ 'https://pblsketch.github.io/jihaksa-2026/materials/purposes.html'),
+('0822', '자료', 3, 'AI 활용 수업 설계 루브릭 · 8준거',
+ '수업 하나를 통째로 볼 때 · 교과 협의회용',
+ 'https://pblsketch.github.io/jihaksa-2026/materials/rubric.html'),
 (null,   '도구', 1, '쌤핀',      '교사 올인원 바탕화면 대시보드 앱', 'https://ssampin.com'),
 (null,   '도구', 2, 'PBL스케치', 'AI 기반 프로젝트 수업 설계 앱',    'https://pblsketch.xyz');
 
