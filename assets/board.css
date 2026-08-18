@@ -103,13 +103,12 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;color:inhe
 
 /* ═══════ ②③ 실습 히트맵 ═══════ */
 .hm{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0}
-.hmscroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column}
-/* 활동 수가 고정(A 9개·B 7개)이라 화면이 넓으면 아래가 비어 보입니다.
-   표를 세로로 늘려 채우되, 화면이 짧으면 원래대로 스크롤됩니다. */
-.hmtable{width:100%;border-collapse:separate;border-spacing:0 6px;table-layout:fixed;height:100%}
-.hmtable td{height:1px}                      /* 행이 남는 높이를 나눠 갖게 하는 관용 기법 */
-.hmtable .cell,.hmtable .riskbar{height:100%;min-height:52px}
-.hmtable td.act{height:auto}
+/* 활동 수가 고정(A 9개·B 7개)이라 큰 화면에서는 아래가 남습니다.
+   행을 늘리면 빈 색 상자만 커지므로, 표를 세로 가운데에 둡니다.
+   화면이 짧으면 justify-content 가 무시되고 원래대로 스크롤됩니다. */
+.hmscroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  display:flex;flex-direction:column;justify-content:safe center}
+.hmtable{width:100%;border-collapse:separate;border-spacing:0 6px;table-layout:fixed;flex:none}
 .hmtable tr:first-child th{position:sticky;top:0;background:var(--paper);z-index:2;padding-top:2px}
 .hmtable th{font-size:13px;color:var(--ink-soft);font-weight:700;padding:0 4px 6px;text-align:center}
 .hmtable th.act{text-align:left;width:32%;padding-left:14px}
