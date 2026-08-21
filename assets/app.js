@@ -374,7 +374,8 @@ async function rMenu(quiet) {
     '<div style="text-align:center;margin-top:16px">' +
       '<button class="btn ghost sm" onclick="changeSession()">' + esc(ses().name) + ' · 연수 변경</button>' +
     '</div>' +
-    '<div class="foot">2026 지학사 국어과 연수 · 박준일</div>';
+    '<div class="foot">2026 지학사 국어과 연수 · 박준일<br>' +
+      '<a href="mailto:pblsketch@gmail.com">pblsketch@gmail.com</a></div>';
 
   m.forEach(function (x) { _menuPrevOpen[x.gate] = isOpen(x.gate); });
 
@@ -567,7 +568,11 @@ function drawPracticeForm(code, resubmit) {
 
       '<div class="goal-box">' +
         '<div class="lb">' + (def.code === 'A' ? '학습 목표' : '활동 목표') + '</div>' +
-        '<div class="src">' + esc(def.goalSrc) + '</div>' +
+        '<div class="src">' + esc(def.goalSrc) +
+          (def.goalTb
+            ? ' <button class="pgbtn sm" onclick="openTB(\'' + def.code + '\',' + def.goalTb + ')">' +
+                '<span class="bk">📖</span>보기</button>'
+            : '') + '</div>' +
         '<ul>' + def.goals.map(function (g) { return '<li>' + esc(g) + '</li>'; }).join('') + '</ul>' +
       '</div>' +
 
@@ -582,6 +587,8 @@ function drawPracticeForm(code, resubmit) {
         '<div class="rowline">' + esc(ex.act) + ' → 외주화 위험 <b>' + esc(ex.risk) + '</b> · ' +
         '허용 단계 <b>' + ex.stage + '</b> · 장치 <b>' + esc(ex.memo) + '</b></div>' +
       '</div>' +
+
+      tbAllHTML(code) +
 
       '<div class="hint" style="margin-bottom:14px">활동 하나마다 세 칸을 채웁니다. 막히면 넘어가셔도 됩니다.<br>' +
       '<b>정답이 있는 활동이 아닙니다.</b> 허용 단계는 수업 목표에 따라 달라지는 게 정상입니다.</div>' +
@@ -600,7 +607,10 @@ function itemHTML(code, it) {
     '<div class="item-h">' +
       '<div class="no">' + it.no + '</div>' +
       '<div class="nm">' + it.name +
-        '<div class="pg">' + esc(it.page) + '</div>' +
+        (it.tb && it.tb.length
+          ? '<button class="pgbtn" onclick="openTB(\'' + code + '\',' + it.tb[0] + ')">' +
+              '<span class="bk">📖</span>' + esc(it.page) + ' 교과서 보기</button>'
+          : '<div class="pg">' + esc(it.page) + '</div>') +
       '</div>' +
     '</div>' +
     '<div class="sub-label">외주화 위험 · 지시문을 그대로 AI에 넣으면 3분 안에 나오는가?</div>' +
@@ -856,12 +866,177 @@ async function rMaterials() {
     (tools.length ? '<div class="section-t">제가 만든 도구</div>' +
       '<div class="hint" style="margin:-4px 0 12px">교실에서 바로 쓰실 수 있게 만든 것들입니다. 무료입니다.</div>' +
       tools.map(function (m) { return card(m, '🧰'); }).join('') : '') +
-    '<div class="foot">2026 지학사 국어과 연수 · 박준일</div>';
+    '<div class="foot">2026 지학사 국어과 연수 · 박준일<br>' +
+      '궁금한 점은 <a href="mailto:pblsketch@gmail.com">pblsketch@gmail.com</a></div>';
 }
 
 function ck(label, on) {
   return '<div><span class="c' + (on ? ' on' : '') + '">✓</span>' + esc(label) + '</div>';
 }
+
+/* ═══════════════ 교과서 보기 ═══════════════
+   문항의 쪽수를 누르면 그 쪽을 전체 화면으로 펼친다.
+   실습 입력을 잃지 않도록 화면 전환이 아니라 오버레이로 띄운다. */
+
+var TB = { code: null, i: 0, z: 0, on: false, pushed: false, pf: {} };
+var TB_ZOOM = [100, 200, 320];       // 320%까지 키워도 원본(1693px)보다 작아 흐려지지 않는다
+var TB_ZLABEL = ['확대', '더 크게', '축소'];
+
+function tbPages(code) { return ((window.TEXTBOOK || {})[code] || {}).pages || []; }
+
+function tbAllHTML(code) {
+  var bk = (window.TEXTBOOK || {})[code];
+  var pages = tbPages(code);
+  if (!bk || !pages.length) return '';
+  return '<button class="tb-all" onclick="openTB(\'' + code + '\',' + pages[0] + ')">' +
+    '<span class="bk">📖</span>' +
+    '<span class="tx">「' + esc(bk.book) + '」 해당 쪽 펼쳐 보기' +
+      '<small>' + pages[0] + '~' + pages[pages.length - 1] + '쪽 중 ' + pages.length + '장</small></span>' +
+    '<span class="go">›</span></button>';
+}
+
+function openTB(code, page) {
+  var pages = tbPages(code);
+  if (!pages.length) return;
+  var i = pages.indexOf(page);
+  TB.code = code;
+  TB.i = i < 0 ? 0 : i;
+  TB.z = 0;
+  if (!TB.on) {
+    TB.on = true;
+    document.body.classList.add('tb-on');
+    document.getElementById('tbv').hidden = false;
+    try { history.pushState({ tb: 1 }, ''); TB.pushed = true; }
+    catch (e) { TB.pushed = false; }
+  }
+  drawTB();
+  tbPrefetch(code);
+  if (!TB.hinted) { TB.hinted = true; toast('두 번 톡 치면 크게 볼 수 있습니다.'); }
+}
+
+function closeTB(fromPop) {
+  if (!TB.on) return;
+  TB.on = false;
+  document.body.classList.remove('tb-on');
+  var el = document.getElementById('tbv');
+  el.hidden = true;
+  el.innerHTML = '';
+  var pushed = TB.pushed;
+  TB.pushed = false;
+  if (!fromPop && pushed) history.back();
+}
+
+function drawTB() {
+  var code = TB.code;
+  var bk = window.TEXTBOOK[code];
+  var pages = tbPages(code);
+  var n = pages[TB.i];
+  var z = TB_ZOOM[TB.z];
+  document.getElementById('tbv').innerHTML =
+    '<div class="tbv-bar">' +
+      '<button class="x" onclick="closeTB()" aria-label="닫기">✕</button>' +
+      '<div class="tt">「' + esc(bk.book) + '」 <b>' + n + '쪽</b></div>' +
+      '<button class="z" onclick="tbZoom()">' + TB_ZLABEL[TB.z] + '</button>' +
+    '</div>' +
+    '<div class="tbv-scroll" id="tbvSc">' +
+      '<img id="tbvImg" src="' + tbSrc(code, n) + '" style="width:' + z + '%" ' +
+        'alt="「' + esc(bk.book) + '」 ' + n + '쪽">' +
+    '</div>' +
+    '<div class="tbv-nav">' +
+      '<button ' + (TB.i === 0 ? 'disabled' : '') + ' onclick="tbGo(-1)">‹ 이전 쪽</button>' +
+      '<span>' + (TB.i + 1) + ' / ' + pages.length + '</span>' +
+      '<button ' + (TB.i === pages.length - 1 ? 'disabled' : '') + ' onclick="tbGo(1)">다음 쪽 ›</button>' +
+    '</div>';
+  tbBindSwipe();
+}
+
+function tbGo(d) {
+  var i = TB.i + d;
+  if (i < 0 || i >= tbPages(TB.code).length) return;
+  TB.i = i;
+  drawTB();
+}
+
+/* 확대해도 보고 있던 지점을 놓치지 않게 스크롤을 되맞춘다.
+   level 을 주면 그 단계로, 안 주면 다음 단계로. ax/ay 는 기준점(없으면 화면 한가운데). */
+function tbZoom(level, ax, ay) {
+  var sc = document.getElementById('tbvSc');
+  var img = document.getElementById('tbvImg');
+  if (!sc || !img) return;
+
+  var r = sc.getBoundingClientRect();
+  var px = (ax == null ? sc.clientWidth / 2 : ax - r.left);
+  var py = (ay == null ? sc.clientHeight / 2 : ay - r.top);
+  var fx = (sc.scrollLeft + px) / Math.max(1, img.offsetWidth);
+  var fy = (sc.scrollTop + py) / Math.max(1, img.offsetHeight);
+
+  TB.z = (level == null ? (TB.z + 1) % TB_ZOOM.length : level);
+  img.style.width = TB_ZOOM[TB.z] + '%';
+  var b = document.querySelector('#tbv .tbv-bar .z');
+  if (b) b.textContent = TB_ZLABEL[TB.z];
+
+  requestAnimationFrame(function () {
+    sc.scrollLeft = fx * img.offsetWidth - px;
+    sc.scrollTop = fy * img.offsetHeight - py;
+  });
+}
+
+/* 두 번 톡 치면 그 지점을 기준으로 크게 ↔ 원래대로 */
+function tbTapZoom(ax, ay) {
+  tbZoom(TB.z === 0 ? TB_ZOOM.length - 1 : 0, ax, ay);
+}
+
+/* 축소 상태에서는 가로로 남는 여백이 없으므로 좌우 스와이프를 쪽 넘김에 쓴다 */
+function tbBindSwipe() {
+  var sc = document.getElementById('tbvSc');
+  if (!sc) return;
+  var x0 = 0, y0 = 0, live = false, lastT = 0, lastX = 0, lastY = 0;
+
+  sc.addEventListener('dblclick', function (e) { tbTapZoom(e.clientX, e.clientY); });
+
+  sc.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { live = false; return; }
+    live = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+
+  sc.addEventListener('touchend', function (e) {
+    if (!live) return;
+    live = false;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - x0, dy = t.clientY - y0;
+
+    // 제자리 탭이면 두 번 톡 쳤는지 본다
+    if (Math.abs(dx) < 14 && Math.abs(dy) < 14) {
+      var now = e.timeStamp;
+      if (now - lastT < 320 && Math.abs(t.clientX - lastX) < 40 && Math.abs(t.clientY - lastY) < 40) {
+        lastT = 0;
+        tbTapZoom(t.clientX, t.clientY);
+      } else {
+        lastT = now; lastX = t.clientX; lastY = t.clientY;
+      }
+      return;
+    }
+    if (TB.z === 0 && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) tbGo(dx < 0 ? 1 : -1);
+  }, { passive: true });
+}
+
+/* 첫 열람 뒤에 나머지 쪽을 미리 받아 둔다 (연수장 와이파이 대비) */
+function tbPrefetch(code) {
+  if (TB.pf[code]) return;
+  TB.pf[code] = true;
+  setTimeout(function () {
+    tbPages(code).forEach(function (n) { new Image().src = tbSrc(code, n); });
+  }, 700);
+}
+
+window.addEventListener('popstate', function () { if (TB.on) closeTB(true); });
+
+window.addEventListener('keydown', function (e) {
+  if (!TB.on) return;
+  if (e.key === 'Escape') closeTB();
+  else if (e.key === 'ArrowLeft') tbGo(-1);
+  else if (e.key === 'ArrowRight') tbGo(1);
+});
 
 /* ═══════════════ ⑦ 관리자 · PC 대시보드 ═══════════════ */
 

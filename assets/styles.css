@@ -37,6 +37,70 @@ button{cursor:pointer;border:none;background:none}
 .spinner{width:26px;height:26px;border:2.5px solid var(--line);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ── 교과서 보기 ── */
+.item-h .pgbtn,.tb-all .bk{-webkit-tap-highlight-color:transparent}
+.pgbtn{
+  display:inline-flex;align-items:center;gap:5px;margin-top:5px;padding:5px 10px 5px 8px;
+  font-size:11.5px;font-weight:600;color:var(--blue);
+  background:var(--card-blue);border:1px solid rgba(53,80,124,.22);border-radius:999px;
+  line-height:1.3;transition:background .15s,transform .1s;
+}
+.pgbtn:active{background:#e2e7f0;transform:scale(.97)}
+.pgbtn .bk{font-size:12.5px;line-height:1}
+.pgbtn.sm{margin-top:0;margin-left:5px;padding:2px 8px 2px 6px;font-size:10.5px;vertical-align:middle}
+
+.tb-all{
+  display:flex;align-items:center;gap:11px;width:100%;margin:0 0 14px;padding:13px 15px;
+  background:var(--card-blue);border:1px solid rgba(53,80,124,.2);border-radius:var(--r);
+  text-align:left;color:var(--blue-deep);transition:transform .1s;
+}
+.tb-all:active{transform:scale(.99)}
+.tb-all .bk{font-size:19px;line-height:1}
+.tb-all .tx{flex:1;font-size:14px;font-weight:600}
+.tb-all .tx small{display:block;margin-top:2px;font-size:11.5px;font-weight:400;color:var(--ink-soft)}
+.tb-all .go{font-size:20px;color:var(--ink-soft);line-height:1}
+
+body.tb-on{overflow:hidden}
+.tbv{
+  position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;
+  background:#2c2620;animation:fade .2s ease;
+}
+.tbv[hidden]{display:none}
+.tbv-bar{
+  display:flex;align-items:center;gap:10px;flex:none;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 12px 10px;
+  background:rgba(44,38,32,.96);border-bottom:1px solid rgba(244,236,217,.14);
+}
+.tbv-bar .tt{flex:1;text-align:center;font-size:13.5px;color:#e8e0cf;font-weight:400}
+.tbv-bar .tt b{font-weight:700;color:#f4ecd9}
+.tbv-bar .x,.tbv-bar .z{
+  flex:none;min-width:52px;padding:7px 12px;border-radius:9px;
+  font-size:13px;font-weight:600;color:#f4ecd9;background:rgba(244,236,217,.13);
+}
+.tbv-bar .x{min-width:40px;font-size:15px}
+.tbv-bar .x:active,.tbv-bar .z:active{background:rgba(244,236,217,.24)}
+
+/* 가운데 정렬을 쓰지 않는다 — 확대해서 넘칠 때 왼쪽 끝이 스크롤로 닿지 않는 문제가 있다.
+   100%면 어차피 폭에 꽉 차고, 그보다 크면 왼쪽부터 훑는 게 맞다. */
+.tbv-scroll{
+  flex:1;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  background:#1f1a16;
+}
+.tbv-scroll img{display:block;width:100%;height:auto;background:#fff}
+
+.tbv-nav{
+  display:flex;align-items:center;gap:10px;flex:none;
+  padding:10px 12px calc(10px + var(--safe-b));
+  background:rgba(44,38,32,.96);border-top:1px solid rgba(244,236,217,.14);
+}
+.tbv-nav button{
+  flex:1;padding:11px 8px;border-radius:10px;font-size:13.5px;font-weight:600;
+  color:#f4ecd9;background:rgba(244,236,217,.13);
+}
+.tbv-nav button:active:not([disabled]){background:rgba(244,236,217,.24)}
+.tbv-nav button[disabled]{opacity:.3}
+.tbv-nav span{flex:none;min-width:56px;text-align:center;font-size:12px;color:#b9b0a0}
+
 /* ── 헤더 ── */
 .top{
   position:sticky;top:0;z-index:40;background:var(--paper);
@@ -466,14 +530,16 @@ body.adm-mode #app{max-width:none;padding:0}
 .live.off{color:var(--ink-soft)}
 .live.off i{background:var(--ink-soft);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.foot{text-align:center;font-size:11.5px;color:var(--ink-soft);padding:34px 0 10px;opacity:.75}
+.foot{text-align:center;font-size:11.5px;color:var(--ink-soft);padding:34px 0 10px;opacity:.75;line-height:1.9}
+.foot a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(53,80,124,.3);padding-bottom:1px}
 
 .toast{
   position:fixed;left:50%;bottom:calc(28px + var(--safe-b));transform:translate(-50%,20px);
   background:var(--ink);color:var(--paper);padding:13px 22px;border-radius:24px;font-size:14px;
-  opacity:0;pointer-events:none;transition:all .3s;z-index:99;max-width:88%;text-align:center;
+  opacity:0;pointer-events:none;transition:all .3s;z-index:950;max-width:88%;text-align:center;
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
+body.tb-on .toast{bottom:calc(92px + var(--safe-b))}   /* 교과서 뷰어의 쪽 넘김 바를 피한다 */
 
 .sticky-b{
   position:sticky;bottom:0;background:linear-gradient(transparent,var(--paper) 26%);
