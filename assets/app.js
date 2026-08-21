@@ -878,9 +878,9 @@ function ck(label, on) {
    문항의 쪽수를 누르면 그 쪽을 전체 화면으로 펼친다.
    실습 입력을 잃지 않도록 화면 전환이 아니라 오버레이로 띄운다. */
 
-var TB = { code: null, i: 0, z: 0, on: false, pushed: false, pf: {} };
-var TB_ZOOM = [100, 200, 320];       // 320%까지 키워도 원본(1693px)보다 작아 흐려지지 않는다
-var TB_ZLABEL = ['확대', '더 크게', '축소'];
+var TB = { code: null, i: 0, scale: 1, on: false, pushed: false, pf: {} };
+var TB_MAX = 4;      // 폭 맞춤의 4배까지. 390px 화면에서 1560px — 원본 1693px보다 작아 흐려지지 않는다
+var TB_STEP = 2;     // 「확대」 버튼 한 번에 가는 배율 (두 손가락이 어려운 분을 위한 길)
 
 function tbPages(code) { return ((window.TEXTBOOK || {})[code] || {}).pages || []; }
 
@@ -901,7 +901,7 @@ function openTB(code, page) {
   var i = pages.indexOf(page);
   TB.code = code;
   TB.i = i < 0 ? 0 : i;
-  TB.z = 0;
+  TB.scale = 1;
   if (!TB.on) {
     TB.on = true;
     document.body.classList.add('tb-on');
@@ -911,7 +911,7 @@ function openTB(code, page) {
   }
   drawTB();
   tbPrefetch(code);
-  if (!TB.hinted) { TB.hinted = true; toast('두 번 톡 치면 크게 볼 수 있습니다.'); }
+  if (!TB.hinted) { TB.hinted = true; toast('두 손가락으로 벌리면 크게 볼 수 있습니다.'); }
 }
 
 function closeTB(fromPop) {
@@ -931,15 +931,14 @@ function drawTB() {
   var bk = window.TEXTBOOK[code];
   var pages = tbPages(code);
   var n = pages[TB.i];
-  var z = TB_ZOOM[TB.z];
   document.getElementById('tbv').innerHTML =
     '<div class="tbv-bar">' +
       '<button class="x" onclick="closeTB()" aria-label="닫기">✕</button>' +
       '<div class="tt">「' + esc(bk.book) + '」 <b>' + n + '쪽</b></div>' +
-      '<button class="z" onclick="tbZoom()">' + TB_ZLABEL[TB.z] + '</button>' +
+      '<button class="z" onclick="tbZoom()">' + (TB.scale > 1.02 ? '원래대로' : '확대') + '</button>' +
     '</div>' +
     '<div class="tbv-scroll" id="tbvSc">' +
-      '<img id="tbvImg" src="' + tbSrc(code, n) + '" style="width:' + z + '%" ' +
+      '<img id="tbvImg" src="' + tbSrc(code, n) + '" style="width:' + (TB.scale * 100) + '%" ' +
         'alt="「' + esc(bk.book) + '」 ' + n + '쪽">' +
     '</div>' +
     '<div class="tbv-nav">' +
@@ -947,7 +946,7 @@ function drawTB() {
       '<span>' + (TB.i + 1) + ' / ' + pages.length + '</span>' +
       '<button ' + (TB.i === pages.length - 1 ? 'disabled' : '') + ' onclick="tbGo(1)">다음 쪽 ›</button>' +
     '</div>';
-  tbBindSwipe();
+  tbBindTouch();
 }
 
 function tbGo(d) {
@@ -957,12 +956,14 @@ function tbGo(d) {
   drawTB();
 }
 
-/* 확대해도 보고 있던 지점을 놓치지 않게 스크롤을 되맞춘다.
-   level 을 주면 그 단계로, 안 주면 다음 단계로. ax/ay 는 기준점(없으면 화면 한가운데). */
-function tbZoom(level, ax, ay) {
+/* 배율을 바꾸되, 기준점(ax·ay, 화면 좌표)이 화면에서 움직이지 않도록 스크롤을 되맞춘다.
+   기준점을 안 주면 화면 한가운데를 잡는다. */
+function tbSetScale(scale, ax, ay) {
   var sc = document.getElementById('tbvSc');
   var img = document.getElementById('tbvImg');
   if (!sc || !img) return;
+
+  scale = Math.min(TB_MAX, Math.max(1, scale));
 
   var r = sc.getBoundingClientRect();
   var px = (ax == null ? sc.clientWidth / 2 : ax - r.left);
@@ -970,10 +971,14 @@ function tbZoom(level, ax, ay) {
   var fx = (sc.scrollLeft + px) / Math.max(1, img.offsetWidth);
   var fy = (sc.scrollTop + py) / Math.max(1, img.offsetHeight);
 
-  TB.z = (level == null ? (TB.z + 1) % TB_ZOOM.length : level);
-  img.style.width = TB_ZOOM[TB.z] + '%';
+  TB.scale = scale;
+  img.classList.remove('pinching');
+  img.style.transform = '';
+  img.style.transformOrigin = '';
+  img.style.width = (scale * 100) + '%';
+
   var b = document.querySelector('#tbv .tbv-bar .z');
-  if (b) b.textContent = TB_ZLABEL[TB.z];
+  if (b) b.textContent = (scale > 1.02 ? '원래대로' : '확대');
 
   requestAnimationFrame(function () {
     sc.scrollLeft = fx * img.offsetWidth - px;
@@ -981,43 +986,89 @@ function tbZoom(level, ax, ay) {
   });
 }
 
-/* 두 번 톡 치면 그 지점을 기준으로 크게 ↔ 원래대로 */
-function tbTapZoom(ax, ay) {
-  tbZoom(TB.z === 0 ? TB_ZOOM.length - 1 : 0, ax, ay);
+/* 한 손으로 쓰실 때를 위한 버튼. 두 손가락으로도 같은 일을 할 수 있다. */
+function tbZoom() {
+  tbSetScale(TB.scale > 1.02 ? 1 : TB_STEP);
 }
 
-/* 축소 상태에서는 가로로 남는 여백이 없으므로 좌우 스와이프를 쪽 넘김에 쓴다 */
-function tbBindSwipe() {
+/* 두 손가락으로 벌리고 오므려 확대·축소.
+   제스처 중에는 transform 으로만 그린다 — 레이아웃을 건드리지 않아 손가락을 따라온다.
+   손을 떼는 순간 실제 width 로 굳혀서 그때부터 정상 스크롤이 되게 한다. */
+function tbBindTouch() {
   var sc = document.getElementById('tbvSc');
-  if (!sc) return;
-  var x0 = 0, y0 = 0, live = false, lastT = 0, lastX = 0, lastY = 0;
+  var img = document.getElementById('tbvImg');
+  if (!sc || !img) return;
 
-  sc.addEventListener('dblclick', function (e) { tbTapZoom(e.clientX, e.clientY); });
+  var pinch = null;    // 확대 중인 제스처
+  var swipe = null;    // 한 손가락으로 미는 중
+  var multi = false;   // 이번 터치에 손가락이 둘 이상 닿은 적이 있는가
+
+  function gap(t) {
+    var dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy) || 1;
+  }
 
   sc.addEventListener('touchstart', function (e) {
-    if (e.touches.length !== 1) { live = false; return; }
-    live = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
-  }, { passive: true });
-
-  sc.addEventListener('touchend', function (e) {
-    if (!live) return;
-    live = false;
-    var t = e.changedTouches[0];
-    var dx = t.clientX - x0, dy = t.clientY - y0;
-
-    // 제자리 탭이면 두 번 톡 쳤는지 본다
-    if (Math.abs(dx) < 14 && Math.abs(dy) < 14) {
-      var now = e.timeStamp;
-      if (now - lastT < 320 && Math.abs(t.clientX - lastX) < 40 && Math.abs(t.clientY - lastY) < 40) {
-        lastT = 0;
-        tbTapZoom(t.clientX, t.clientY);
-      } else {
-        lastT = now; lastX = t.clientX; lastY = t.clientY;
-      }
+    if (e.touches.length >= 2) {
+      multi = true;
+      swipe = null;
+      var r = sc.getBoundingClientRect();
+      var px = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var py = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      // 두 손가락 사이의 지점을 축으로 삼는다 — 그 자리가 화면에서 안 움직인다
+      pinch = { d0: gap(e.touches), s0: TB.scale, live: TB.scale, px: px, py: py };
+      img.style.transformOrigin = (sc.scrollLeft + px) + 'px ' + (sc.scrollTop + py) + 'px';
+      img.classList.add('pinching');
       return;
     }
-    if (TB.z === 0 && Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) tbGo(dx < 0 ? 1 : -1);
+    if (multi) return;
+    swipe = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }, { passive: true });
+
+  sc.addEventListener('touchmove', function (e) {
+    if (!pinch || e.touches.length < 2) return;
+    e.preventDefault();                        // 브라우저 기본 동작이 끼어들지 않게
+    pinch.live = Math.min(TB_MAX, Math.max(1, pinch.s0 * gap(e.touches) / pinch.d0));
+    img.style.transform = 'scale(' + (pinch.live / pinch.s0) + ')';
+  }, { passive: false });
+
+  sc.addEventListener('touchend', function (e) {
+    if (pinch && e.touches.length < 2) {
+      var r = sc.getBoundingClientRect();
+      var live = pinch.live, px = pinch.px, py = pinch.py;
+      pinch = null;
+      tbSetScale(live, r.left + px, r.top + py);
+    }
+    if (e.touches.length) return;
+
+    // 폭 맞춤 상태에서는 가로로 남는 여백이 없으니 좌우로 미는 건 쪽 넘김으로 받는다
+    if (!multi && swipe && TB.scale <= 1.02) {
+      var t = e.changedTouches[0];
+      var dx = t.clientX - swipe.x, dy = t.clientY - swipe.y;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.8) tbGo(dx < 0 ? 1 : -1);
+    }
+    multi = false;
+    swipe = null;
+  }, { passive: true });
+
+  sc.addEventListener('touchcancel', function () {
+    pinch = null; swipe = null; multi = false;
+    img.classList.remove('pinching');
+    img.style.transform = '';
+    img.style.transformOrigin = '';
+  }, { passive: true });
+
+  // 아이폰 사파리가 자기 확대로 가로채지 않게
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (n) {
+    sc.addEventListener(n, function (ev) { ev.preventDefault(); });
+  });
+
+  // 마우스 휠 + Ctrl — 강사가 PC로 띄워 볼 때
+  sc.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey) return;
+    e.preventDefault();
+    tbSetScale(TB.scale * (e.deltaY < 0 ? 1.12 : 1 / 1.12), e.clientX, e.clientY);
+  }, { passive: false });
 }
 
 /* 첫 열람 뒤에 나머지 쪽을 미리 받아 둔다 (연수장 와이파이 대비) */

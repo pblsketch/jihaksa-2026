@@ -85,8 +85,11 @@ body.tb-on{overflow:hidden}
 .tbv-scroll{
   flex:1;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   background:#1f1a16;
+  touch-action:pan-x pan-y;   /* 한 손가락 스크롤은 브라우저에, 두 손가락 확대는 우리가 */
 }
-.tbv-scroll img{display:block;width:100%;height:auto;background:#fff}
+.tbv-scroll img{display:block;width:100%;height:auto;background:#fff;transform-origin:0 0}
+/* 확대하는 동안만 별도 레이어로 올린다 — 늘 올려 두면 큰 이미지가 GPU 메모리를 붙들고 있다 */
+.tbv-scroll img.pinching{will-change:transform}
 
 .tbv-nav{
   display:flex;align-items:center;gap:10px;flex:none;
